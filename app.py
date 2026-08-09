@@ -78,7 +78,7 @@ def cart():
 
 @app.route("/checkout")
 def checkout():
-    return render_template("Checkout.html")
+    return render_template("checkout.html")
 
 
 @app.route("/orders")
