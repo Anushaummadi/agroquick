@@ -36,7 +36,7 @@ def search():
 
 @app.route("/seeds")
 def seeds():
-    return render_template("Seeds.html")
+    return render_template("seeds.html")
 
 
 @app.route("/fertilizer")
