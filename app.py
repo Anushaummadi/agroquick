@@ -155,6 +155,6 @@ def place_order():
 
     return redirect("/orders")
 
-
+print(app.url_map)
 if __name__ == "__main__":
     app.run()
