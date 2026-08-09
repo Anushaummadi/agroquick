@@ -89,19 +89,21 @@ def orders():
         order=order
     )
 
+
 @app.route("/delivery")
 def delivery():
     return render_template("Delivery.html")
 
-app.route("/add-to-cart", methods=["GET", "POST"])
+
+@app.route("/add-to-cart", methods=["POST"])
 def add_to_cart():
 
-    product = request.values.get("product", "Product")
-    price = request.values.get("price", "0")
+    product = request.form.get("product", "Product")
+    price = request.form.get("price", "0")
 
     try:
         price = float(price)
-    except:
+    except (ValueError, TypeError):
         price = 0
 
     cart_items = session.get("cart", [])
@@ -109,15 +111,12 @@ def add_to_cart():
     found = False
 
     for item in cart_items:
-
         if item["product"] == product:
-
             item["quantity"] += 1
             found = True
             break
 
     if not found:
-
         cart_items.append({
             "product": product,
             "price": price,
@@ -155,6 +154,6 @@ def place_order():
 
     return redirect("/orders")
 
-print(app.url_map)
+
 if __name__ == "__main__":
     app.run()
