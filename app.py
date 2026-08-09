@@ -12,12 +12,12 @@ def home():
 
 @app.route("/about")
 def about():
-    return render_template("About.html")
+    return render_template("about.html")
 
 
 @app.route("/contact")
 def contact():
-    return render_template("Contact.html")
+    return render_template("contact.html")
 
 
 @app.route("/login")
@@ -32,7 +32,7 @@ def signup():
 
 @app.route("/search")
 def search():
-    return render_template("Search.html")
+    return render_template("search.html")
 
 
 @app.route("/seeds")
