@@ -1,213 +1,188 @@
-from flask import Flask, render_template, request, redirect, session
-
-app = Flask(__name__)
-app.secret_key = "agroquick123"
-
-
-@app.route("/")
-def home():
-    return render_template("home.html")
-
-
-@app.route("/about")
-def about():
-    return render_template("About.html")
-
-
-@app.route("/contact")
-def contact():
-    return render_template("Contact.html")
-
-
-@app.route("/login")
-def login():
-    return render_template("Login.html")
-
-
-@app.route("/signup")
-def signup():
-    return render_template("Signup.html")
-
-
-@app.route("/search")
-def search():
-    return render_template("Search.html")
-
-
-@app.route("/seeds")
-def seeds():
-    return render_template("seeds.html")
-
-
-@app.route("/fertilizer")
-def fertilizer():
-    return render_template("Fertilizer.html")
-
-
-@app.route("/equipment")
-def equipment():
-    return render_template("Equipment.html")
-
-
-@app.route("/tools")
-def tools():
-    return render_template("Tools.html")
-
-
-@app.route("/crop-care")
-def crop_care():
-    return render_template("Crop_care.html")
-
-
-@app.route("/cart")
-def cart():
-    cart_items = session.get("cart", [])
-
-    total = 0
-
-    for item in cart_items:
-        total += float(item["price"]) * int(item["quantity"])
-
-    return render_template(
-        "cart.html",
-        cart=cart_items,
-        total=total
-    )
-
-
-@app.route("/checkout")
-def checkout():
-    cart_items = session.get("cart", [])
-
-    total = 0
-
-    for item in cart_items:
-        total += float(item["price"]) * int(item["quantity"])
-
-    return render_template(
-        "Checkout.html",
-        cart=cart_items,
-        total=total
-    )
-
-
-@app.route("/orders")
-def orders():
-    order = session.get("order")
-
-    return render_template(
-        "Orders.html",
-        order=order
-    )
-
-
-@app.route("/delivery")
-def delivery():
-    return render_template("Delivery.html")
-
-
-@app.route("/add-to-cart", methods=["POST"])
-def add_to_cart():
-
-    product = request.form.get("product", "Product")
-    price = request.form.get("price", "0")
-
-    try:
-        price = float(price)
-    except (ValueError, TypeError):
-        price = 0
-
-    cart_items = session.get("cart", [])
-
-    found = False
-
-    for item in cart_items:
-        if item["product"] == product:
-            item["quantity"] += 1
-            found = True
-            break
-
-    if not found:
-        cart_items.append({
-            "product": product,
-            "price": price,
-            "quantity": 1
-        })
-
-    session["cart"] = cart_items
-
-    return redirect("/cart")
-
-
-@app.route("/increase/<int:index>")
-def increase(index):
-
-    cart_items = session.get("cart", [])
-
-    if 0 <= index < len(cart_items):
-        cart_items[index]["quantity"] += 1
-
-    session["cart"] = cart_items
-
-    return redirect("/cart")
-
-
-@app.route("/decrease/<int:index>")
-def decrease(index):
-
-    cart_items = session.get("cart", [])
-
-    if 0 <= index < len(cart_items):
-
-        if cart_items[index]["quantity"] > 1:
-            cart_items[index]["quantity"] -= 1
-        else:
-            cart_items.pop(index)
-
-    session["cart"] = cart_items
-
-    return redirect("/cart")
-
-
-@app.route("/remove-from-cart/<int:index>")
-def remove_from_cart(index):
-
-    cart_items = session.get("cart", [])
-
-    if 0 <= index < len(cart_items):
-        cart_items.pop(index)
-
-    session["cart"] = cart_items
-
-    return redirect("/cart")
-
-
-@app.route("/place-order", methods=["POST"])
-def place_order():
-
-    name = request.form.get("name")
-    mobile = request.form.get("mobile")
-    address = request.form.get("address")
-
-    cart_items = session.get("cart", [])
-
-    total = 0
-
-    for item in cart_items:
-        total += float(item["price"]) * int(item["quantity"])
-
-    session["order"] = {
-        "name": name,
-        "mobile": mobile,
-        "address": address,
-        "items": cart_items,
-        "total": total
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>AgroQuick - Cart</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f5f7f5;
     }
 
-    session["cart"] = []
+    header {
+        background: #198754;
+        color: white;
+        padding: 18px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-    return redirect("/orders")
+    header h1 {
+        margin: 0;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 18px;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #198754;
+    }
+
+    .cart-item {
+        background: white;
+        margin: 15px 0;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .cart-item h3 {
+        color: #198754;
+        margin-top: 0;
+    }
+
+    .quantity {
+        margin: 15px 0;
+    }
+
+    .quantity a {
+        display: inline-block;
+        padding: 6px 12px;
+        margin: 0 5px;
+        background: #198754;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .remove {
+        background: #dc3545 !important;
+    }
+
+    .total {
+        background: white;
+        padding: 20px;
+        margin-top: 20px;
+        border-radius: 10px;
+        text-align: right;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .checkout {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        margin-top: 20px;
+        background: #198754;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 17px;
+        box-sizing: border-box;
+    }
+
+    .empty {
+        text-align: center;
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+    }
+</style>
+
+</head><body><header>
+    <h1>🌾 AgroQuick</h1><nav>
+    <a href="/">Home</a>
+    <a href="/seeds">Seeds</a>
+    <a href="/fertilizer">Fertilizer</a>
+    <a href="/cart">🛒 Cart</a>
+</nav>
+
+</header><div class="container"><h2>🛒 Your Cart</h2>
+
+{% if cart %}
+
+    {% for item in cart %}
+
+    <div class="cart-item">
+
+        <h3>{{ item["product"] }}</h3>
+
+        <p>
+            Price: ₹{{ item["price"] }}
+        </p>
+
+        <p>
+            Quantity: {{ item["quantity"] }}
+        </p>
+
+        <p>
+            Subtotal:
+            ₹{{ item["price"] * item["quantity"] }}
+        </p>
+
+        <div class="quantity">
+
+            <a href="/decrease/{{ loop.index0 }}">
+                −
+            </a>
+
+            <strong>
+                {{ item["quantity"] }}
+            </strong>
+
+            <a href="/increase/{{ loop.index0 }}">
+                +
+            </a>
+
+            <a class="remove"
+               href="/remove-from-cart/{{ loop.index0 }}">
+                Remove
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
 
 
-if __name__ == "__main__":
-    app.run()
+    <div class="total">
+        Total: ₹{{ total }}
+    </div>
+
+    <a class="checkout" href="/checkout">
+        Proceed to Checkout
+    </a>
+
+{% else %}
+
+    <div class="empty">
+
+        <h3>Your cart is empty 🛒</h3>
+
+        <p>Add some farming products to your cart.</p>
+
+        <a class="checkout" href="/seeds">
+            Continue Shopping
+        </a>
+
+    </div>
+
+{% endif %}
+
+</div></body>
+</html>
