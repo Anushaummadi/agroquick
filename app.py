@@ -32,7 +32,75 @@ def signup():
 
 @app.route("/search")
 def search():
-    return render_template("search.html")
+
+    query = request.args.get("query", "").strip().lower()
+
+    products = [
+        {
+            "name": "Rice Seeds",
+            "category": "Seeds",
+            "price": 100,
+            "url": "/seeds"
+        },
+        {
+            "name": "Wheat Seeds",
+            "category": "Seeds",
+            "price": 120,
+            "url": "/seeds"
+        },
+        {
+            "name": "Maize Seeds",
+            "category": "Seeds",
+            "price": 150,
+            "url": "/seeds"
+        },
+        {
+            "name": "Vegetable Seeds",
+            "category": "Seeds",
+            "price": 80,
+            "url": "/seeds"
+        },
+        {
+            "name": "Urea Fertilizer",
+            "category": "Fertilizer",
+            "price": 500,
+            "url": "/fertilizer"
+        },
+        {
+            "name": "Fertilizer",
+            "category": "Fertilizer",
+            "price": 450,
+            "url": "/fertilizer"
+        },
+        {
+            "name": "Water Pump",
+            "category": "Equipment",
+            "price": 2500,
+            "url": "/equipment"
+        },
+        {
+            "name": "Farming Tools",
+            "category": "Tools",
+            "price": 300,
+            "url": "/tools"
+        }
+    ]
+
+    if query:
+        results = [
+            product
+            for product in products
+            if query in product["name"].lower()
+            or query in product["category"].lower()
+        ]
+    else:
+        results = []
+
+    return render_template(
+        "search.html",
+        query=query,
+        results=results
+    )
 
 
 @app.route("/seeds")
@@ -62,6 +130,7 @@ def crop_care():
 
 @app.route("/cart")
 def cart():
+
     cart_items = session.get("cart", [])
 
     total = 0
@@ -78,6 +147,7 @@ def cart():
 
 @app.route("/checkout")
 def checkout():
+
     cart_items = session.get("cart", [])
 
     total = 0
@@ -94,6 +164,7 @@ def checkout():
 
 @app.route("/orders")
 def orders():
+
     order = session.get("order")
 
     return render_template(
