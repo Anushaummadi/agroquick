@@ -69,7 +69,7 @@ def cart():
         total += float(item["price"]) * int(item["quantity"])
 
     return render_template(
-        "Cart.html",
+        "cart.html",
         cart=cart_items,
         total=total
     )
