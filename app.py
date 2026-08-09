@@ -78,7 +78,18 @@ def cart():
 
 @app.route("/checkout")
 def checkout():
-    return render_template("checkout.html")
+    cart_items = session.get("cart", [])
+
+    total = 0
+
+    for item in cart_items:
+        total += float(item["price"]) * int(item["quantity"])
+
+    return render_template(
+        "checkout.html",
+        cart=cart_items,
+        total=total
+    )
 
 
 @app.route("/orders")
@@ -86,7 +97,7 @@ def orders():
     order = session.get("order")
 
     return render_template(
-        "Orders.html",
+        "orders.html",
         order=order
     )
 
@@ -112,12 +123,14 @@ def add_to_cart():
     found = False
 
     for item in cart_items:
+
         if item["product"] == product:
             item["quantity"] += 1
             found = True
             break
 
     if not found:
+
         cart_items.append({
             "product": product,
             "price": price,
