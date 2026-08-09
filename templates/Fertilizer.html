@@ -1,0 +1,159 @@
+<!DOCTYPE html><html>
+<head>
+    <title>AgroQuick - Fertilizers</title><style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f8f4;
+        text-align: center;
+    }
+
+    h1 {
+        color: #198754;
+    }
+
+    .products {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+        max-width: 900px;
+        margin: 30px auto;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 3px 10px #ccc;
+    }
+
+    .image {
+        width: 180px;
+        height: 150px;
+        margin: auto;
+        background: #e8f5e9;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 70px;
+    }
+
+    button {
+        background: #198754;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 7px;
+        cursor: pointer;
+    }
+
+    a {
+        color: #198754;
+        font-weight: bold;
+        text-decoration: none;
+    }
+</style>
+
+</head><body><h1>🌾 AgroQuick Fertilizers</h1><h2>Fertilizer Products</h2><div class="products"><!-- UREA -->
+<div class="card">
+
+    <div class="image">
+        🧪🌱
+    </div>
+
+    <h2>Urea</h2>
+
+    <p>Nitrogen fertilizer</p>
+    <p><b>Price: ₹300</b></p>
+
+    <form action="/add-to-cart" method="POST">
+        <input type="hidden" name="product" value="Urea">
+        <input type="hidden" name="price" value="300">
+
+        <button type="submit">
+            Add to Cart
+        </button>
+    </form>
+
+</div>
+
+
+<!-- DAP -->
+<div class="card">
+
+    <div class="image">
+        🧪🌿
+    </div>
+
+    <h2>DAP Fertilizer</h2>
+
+    <p>Nitrogen + Phosphorus</p>
+    <p><b>Price: ₹500</b></p>
+
+    <form action="/add-to-cart" method="POST">
+        <input type="hidden" name="product" value="DAP Fertilizer">
+        <input type="hidden" name="price" value="500">
+
+        <button type="submit">
+            Add to Cart
+        </button>
+    </form>
+
+</div>
+
+
+<!-- NPK -->
+<div class="card">
+
+    <div class="image">
+        🌾🧪
+    </div>
+
+    <h2>NPK Fertilizer</h2>
+
+    <p>Nitrogen + Phosphorus + Potassium</p>
+    <p><b>Price: ₹450</b></p>
+
+    <form action="/add-to-cart" method="POST">
+        <input type="hidden" name="product" value="NPK Fertilizer">
+        <input type="hidden" name="price" value="450">
+
+        <button type="submit">
+            Add to Cart
+        </button>
+    </form>
+
+</div>
+
+
+<!-- ORGANIC -->
+<div class="card">
+
+    <div class="image">
+        🍂🌱
+    </div>
+
+    <h2>Organic Fertilizer</h2>
+
+    <p>Natural soil nutrients</p>
+    <p><b>Price: ₹350</b></p>
+
+    <form action="/add-to-cart" method="POST">
+        <input type="hidden" name="product" value="Organic Fertilizer">
+        <input type="hidden" name="price" value="350">
+
+        <button type="submit">
+            Add to Cart
+        </button>
+    </form>
+
+</div>
+
+</div><br><a href="/cart">🛒 View Cart</a>
+
+<br><br>
+
+<a href="/">🏠 Back to Home</a>
+
+</body>
+</html>

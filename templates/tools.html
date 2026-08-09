@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AgroQuick - Farming Tools</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f8f2;
+        }
+
+        header {
+            background: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .product {
+            background: white;
+            width: 220px;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px #cccccc;
+        }
+
+        .emoji-image {
+            font-size: 80px;
+            height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product h2 {
+            color: #2e7d32;
+        }
+
+        .product button {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .cart-button {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            background: #ff9800;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-button {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛠️ AgroQuick Farming Tools</h1>
+    <p>Useful Tools for Everyday Farming</p>
+</header>
+
+<a href="/cart" class="cart-button">🛒 View Cart</a>
+
+<div class="products">
+
+    <div class="product">
+        <div class="emoji-image">🔨</div>
+
+        <h2>Hand Hoe</h2>
+        <p>Useful for soil preparation.</p>
+
+        <h3>₹450</h3>
+
+        <a href="/add-to-cart/Hand%20Hoe/450">
+            <button>Add to Cart</button>
+        </a>
+    </div>
+
+    <div class="product">
+        <div class="emoji-image">✂️</div>
+
+        <h2>Pruning Shears</h2>
+        <p>Useful for trimming plants.</p>
+
+        <h3>₹350</h3>
+
+        <a href="/add-to-cart/Pruning%20Shears/350">
+            <button>Add to Cart</button>
+        </a>
+    </div>
+
+    <div class="product">
+        <div class="emoji-image">🪣</div>
+
+        <h2>Watering Can</h2>
+        <p>Useful for watering plants.</p>
+
+        <h3>₹250</h3>
+
+        <a href="/add-to-cart/Watering%20Can/250">
+            <button>Add to Cart</button>
+        </a>
+    </div>
+
+    <div class="product">
+        <div class="emoji-image">🌱</div>
+
+        <h2>Hand Cultivator</h2>
+        <p>Useful for loosening soil.</p>
+
+        <h3>₹300</h3>
+
+        <a href="/add-to-cart/Hand%20Cultivator/300">
+            <button>Add to Cart</button>
+        </a>
+    </div>
+
+</div>
+
+<a href="/home" class="back-button">🏠 Back to Home</a>
+
+</body>
+</html>

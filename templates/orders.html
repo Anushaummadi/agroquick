@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AgroQuick - Orders</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7f5;
+            margin: 0;
+        }
+
+        header {
+            background: #198754;
+            color: white;
+            padding: 18px 30px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        button {
+            background: #198754;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🌾 AgroQuick</h1>
+</header>
+
+<div class="container">
+
+{% if order %}
+
+<div class="box">
+
+    <h1>✅ Order Placed Successfully!</h1>
+
+    <hr>
+
+    <h2>Customer Details</h2>
+
+    <p><b>Name:</b> {{ order["name"] }}</p>
+    <p><b>Mobile:</b> {{ order["mobile"] }}</p>
+    <p><b>Address:</b> {{ order["address"] }}</p>
+
+    <hr>
+
+    <h2>Order Details</h2>
+
+    {% for item in order["items"] %}
+
+    <div>
+        <p><b>Product:</b> {{ item["product"] }}</p>
+        <p><b>Price:</b> ₹{{ item["price"] }}</p>
+        <p><b>Quantity:</b> {{ item["quantity"] }}</p>
+    </div>
+
+    <hr>
+
+    {% endfor %}
+
+    <h2>Total: ₹{{ order["total"] }}</h2>
+
+    <button onclick="alert('Your order is being prepared!')">
+        📦 Track Order
+    </button>
+
+    <a href="/">
+        <button>Continue Shopping</button>
+    </a>
+
+</div>
+
+{% else %}
+
+<div class="box">
+    <h2>No orders yet.</h2>
+
+    <a href="/">
+        <button>Start Shopping</button>
+    </a>
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
+
+
+<br><br>
+
+<a href="/delivery">
+    <button>🚚 Verify Fingerprint for Delivery</button>
+</a>

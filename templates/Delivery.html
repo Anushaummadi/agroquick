@@ -1,0 +1,72 @@
+<!DOCTYPE html><html>
+<head>
+    <title>AgroQuick - Delivery Verification</title><style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f8f4;
+        text-align: center;
+        padding: 40px;
+    }
+
+    .box {
+        background: white;
+        max-width: 500px;
+        margin: auto;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 3px 12px #ccc;
+    }
+
+    .fingerprint {
+        font-size: 90px;
+        margin: 20px;
+    }
+
+    button {
+        background: #198754;
+        color: white;
+        border: none;
+        padding: 14px 25px;
+        border-radius: 8px;
+        font-size: 17px;
+        cursor: pointer;
+    }
+
+    #success {
+        display: none;
+        color: #198754;
+        font-size: 22px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+</style>
+
+</head><body><div class="box"><h1>🌾 AgroQuick</h1>
+
+<h2>Delivery Verification</h2>
+
+<div class="fingerprint">🖐️</div>
+
+<p>Verify fingerprint to confirm delivery.</p>
+
+<button onclick="verifyFingerprint()">
+    Verify Fingerprint
+</button>
+
+<div id="success">
+    ✅ Fingerprint Verified!<br><br>
+    Delivery Confirmed Successfully.
+</div>
+
+</div><script>
+
+function verifyFingerprint() {
+
+    alert("Fingerprint verification successful!");
+
+    document.getElementById("success").style.display = "block";
+
+}
+
+</script></body>
+</html>

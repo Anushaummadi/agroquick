@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AgroQuick - Cart</title>
+</head>
+
+<body>
+
+<h1>🛒 AgroQuick Cart</h1>
+
+{% if cart %}
+
+    {% for item in cart %}
+
+        <div>
+            <h3>{{ item["product"] }}</h3>
+
+            <p>Price: ₹{{ item["price"] }}</p>
+
+            <p>
+                Quantity:
+
+                <a href="/decrease/{{ loop.index0 }}">
+                    <button>-</button>
+                </a>
+
+                {{ item["quantity"] }}
+
+                <a href="/increase/{{ loop.index0 }}">
+                    <button>+</button>
+                </a>
+            </p>
+
+            <p>
+                Subtotal:
+                ₹{{ item["price"] * item["quantity"] }}
+            </p>
+
+            <a href="/remove-from-cart/{{ loop.index0 }}">
+                <button>Remove</button>
+            </a>
+        </div>
+
+        <hr>
+
+    {% endfor %}
+
+    <h2>Total: ₹{{ total }}</h2>
+
+    <a href="/checkout">
+        <button>Proceed to Checkout</button>
+    </a>
+
+{% else %}
+
+    <h2>Your cart is empty.</h2>
+
+    <a href="/seeds">
+        <button>Continue Shopping</button>
+    </a>
+
+{% endif %}
+
+</body>
+</html>

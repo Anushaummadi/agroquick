@@ -1,0 +1,206 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>AgroQuick - Seeds</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f5f7f5;
+    }
+
+    header {
+        background: #198754;
+        color: white;
+        padding: 18px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    header h1 {
+        margin: 0;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 18px;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: auto;
+        padding: 30px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #198754;
+        margin-bottom: 30px;
+    }
+
+    .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        text-align: center;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .seed-image {
+        width: 180px;
+        height: 140px;
+        margin: 0 auto 15px;
+        background: #e8f5e9;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 65px;
+    }
+
+    .card h3 {
+        color: #198754;
+    }
+
+    .price {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    button {
+        background: #198754;
+        color: white;
+        border: none;
+        padding: 11px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #146c43;
+    }
+</style>
+
+</head><body><header>
+    <h1>🌾 AgroQuick</h1><nav>
+    <a href="/">Home</a>
+    <a href="/cart">🛒 Cart</a>
+    <a href="/orders">Orders</a>
+</nav>
+
+</header><div class="container"><h2>🌱 Seeds</h2>
+
+<div class="products">
+
+    <!-- Rice Seeds -->
+    <div class="card">
+
+        <div class="seed-image">
+            🌾🌱
+        </div>
+
+        <h3>Rice Seeds</h3>
+
+        <p>Quality rice seeds for farming.</p>
+
+        <p class="price">₹100</p>
+
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Rice Seeds">
+            <input type="hidden" name="price" value="100">
+
+            <button type="submit">
+                Add to Cart
+            </button>
+        </form>
+
+    </div>
+
+
+    <!-- Wheat Seeds -->
+    <div class="card">
+
+        <div class="seed-image">
+            🌾🌿
+        </div>
+
+        <h3>Wheat Seeds</h3>
+
+        <p>Good quality wheat seeds.</p>
+
+        <p class="price">₹120</p>
+
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Wheat Seeds">
+            <input type="hidden" name="price" value="120">
+
+            <button type="submit">
+                Add to Cart
+            </button>
+        </form>
+
+    </div>
+
+
+    <!-- Maize Seeds -->
+    <div class="card">
+
+        <div class="seed-image">
+            🌽🌱
+        </div>
+
+        <h3>Maize Seeds</h3>
+
+        <p>Quality maize seeds for farmers.</p>
+
+        <p class="price">₹150</p>
+
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Maize Seeds">
+            <input type="hidden" name="price" value="150">
+
+            <button type="submit">
+                Add to Cart
+            </button>
+        </form>
+
+    </div>
+
+
+    <!-- Vegetable Seeds -->
+    <div class="card">
+
+        <div class="seed-image">
+            🥕🥬🌱
+        </div>
+
+        <h3>Vegetable Seeds</h3>
+
+        <p>Fresh vegetable seeds.</p>
+
+        <p class="price">₹80</p>
+
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Vegetable Seeds">
+            <input type="hidden" name="price" value="80">
+
+            <button type="submit">
+                Add to Cart
+            </button>
+        </form>
+
+    </div>
+
+</div>
+
+</div></body>
+</html>
