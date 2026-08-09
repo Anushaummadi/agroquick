@@ -93,7 +93,7 @@ def orders():
 def delivery():
     return render_template("Delivery.html")
 
-@app.route("/add-to-cart", methods=["GET", "POST"])
+app.route("/add-to-cart", methods=["GET", "POST"])
 def add_to_cart():
 
     product = request.values.get("product", "Product")
