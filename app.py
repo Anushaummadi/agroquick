@@ -126,7 +126,7 @@ def tools():
 
 @app.route("/crop-care")
 def crop_care():
-    return render_template("Crop_care.html")
+    return render_template("crop_care.html")
 
 
 @app.route("/cart")
