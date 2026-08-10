@@ -74,6 +74,10 @@
             text-decoration: none;
             font-weight: bold;
         }
+
+        form {
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -88,6 +92,7 @@
 
 <div class="products">
 
+    <!-- Plant Growth Support -->
     <div class="product">
         <div class="emoji-image">🌱</div>
 
@@ -96,11 +101,15 @@
 
         <h3>₹250</h3>
 
-        <a href="/add-to-cart/Plant%20Growth%20Support/250">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Plant Growth Support">
+            <input type="hidden" name="price" value="250">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
+
+    <!-- Neem Based Crop Care -->
     <div class="product">
         <div class="emoji-image">🍃</div>
 
@@ -109,11 +118,15 @@
 
         <h3>₹300</h3>
 
-        <a href="/add-to-cart/Neem%20Based%20Crop%20Care/300">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Neem Based Crop Care">
+            <input type="hidden" name="price" value="300">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
+
+    <!-- Micronutrient Mix -->
     <div class="product">
         <div class="emoji-image">🌿</div>
 
@@ -122,11 +135,15 @@
 
         <h3>₹400</h3>
 
-        <a href="/add-to-cart/Micronutrient%20Mix/400">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Micronutrient Mix">
+            <input type="hidden" name="price" value="400">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
+
+    <!-- Crop Growth Booster -->
     <div class="product">
         <div class="emoji-image">🌾</div>
 
@@ -135,14 +152,16 @@
 
         <h3>₹350</h3>
 
-        <a href="/add-to-cart/Crop%20Growth%20Booster/350">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Crop Growth Booster">
+            <input type="hidden" name="price" value="350">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
 </div>
 
-<a href="/home" class="back-button">🏠 Back to Home</a>
+<a href="/" class="back-button">🏠 Back to Home</a>
 
 </body>
 </html>
