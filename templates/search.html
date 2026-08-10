@@ -72,7 +72,7 @@
             margin-top: 12px;
             font-weight: bold;
             color: #2e7d32;
-            min-height: 20px;
+            min-height: 25px;
         }
 
         .results {
@@ -151,22 +151,45 @@
         </button>
 
         <button type="submit">
-            Search
+            🔎 Search
         </button>
 
     </form>
 
     <div class="language-box">
-        <label for="language">🌐 Voice Language: </label>
+
+        <label for="language">
+            🌐 Voice Language:
+        </label>
 
         <select id="language">
-            <option value="en-IN">English</option>
-            <option value="te-IN">తెలుగు (Telugu)</option>
-            <option value="hi-IN">हिन्दी (Hindi)</option>
-            <option value="mr-IN">मराठी (Marathi)</option>
-            <option value="ta-IN">தமிழ் (Tamil)</option>
-            <option value="kn-IN">ಕನ್ನಡ (Kannada)</option>
+
+            <option value="en-IN">
+                English
+            </option>
+
+            <option value="te-IN">
+                తెలుగు (Telugu)
+            </option>
+
+            <option value="hi-IN">
+                हिन्दी (Hindi)
+            </option>
+
+            <option value="ta-IN">
+                தமிழ் (Tamil)
+            </option>
+
+            <option value="kn-IN">
+                ಕನ್ನಡ (Kannada)
+            </option>
+
+            <option value="mr-IN">
+                मराठी (Marathi)
+            </option>
+
         </select>
+
     </div>
 
     <div id="voiceStatus"></div>
@@ -184,9 +207,13 @@
 
         <h2>{{ product.name }}</h2>
 
-        <p>Category: {{ product.category }}</p>
+        <p>
+            Category: {{ product.category }}
+        </p>
 
-        <h3>₹{{ product.price }}</h3>
+        <h3>
+            ₹{{ product.price }}
+        </h3>
 
         <a href="{{ product.url }}">
             View Product
@@ -215,9 +242,13 @@
 
 <div class="buttons">
 
-    <a href="/">🏠 Home</a>
+    <a href="/">
+        🏠 Home
+    </a>
 
-    <a href="/cart">🛒 Cart</a>
+    <a href="/cart">
+        🛒 Cart
+    </a>
 
 </div>
 
@@ -230,69 +261,144 @@ function startVoiceSearch() {
         window.SpeechRecognition ||
         window.webkitSpeechRecognition;
 
-    const voiceButton = document.getElementById("voiceButton");
-    const status = document.getElementById("voiceStatus");
-    const input = document.getElementById("searchInput");
-    const language = document.getElementById("language").value;
+    const voiceButton =
+        document.getElementById("voiceButton");
+
+    const status =
+        document.getElementById("voiceStatus");
+
+    const input =
+        document.getElementById("searchInput");
+
+    const language =
+        document.getElementById("language").value;
+
+
+    /* Check browser support */
 
     if (!SpeechRecognition) {
 
         status.innerHTML =
-            "❌ Voice search is not supported in this browser. Try Chrome.";
+            "❌ Voice search is not supported in this browser. Please use Google Chrome.";
 
         return;
     }
 
-    const recognition = new SpeechRecognition();
+
+    const recognition =
+        new SpeechRecognition();
+
+
+    /* Voice settings */
 
     recognition.lang = language;
+
     recognition.continuous = false;
-    recognition.interimResults = false;
+
+    recognition.interimResults = true;
+
     recognition.maxAlternatives = 1;
 
+
+    /* Start UI */
+
     voiceButton.classList.add("listening");
+
     voiceButton.innerHTML = "🔴";
 
-    status.innerHTML = "🎤 Listening... Please speak.";
+    status.innerHTML =
+        "🎤 Listening... Speak clearly.";
 
-    recognition.start();
+
+    /* When speech is recognized */
 
     recognition.onresult = function(event) {
 
-        const speechText =
-            event.results[0][0].transcript;
+        let text = "";
 
-        input.value = speechText;
+        for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+        ) {
 
-        status.innerHTML =
-            "✅ Heard: " + speechText;
+            text +=
+                event.results[i][0].transcript;
+        }
 
-        voiceButton.classList.remove("listening");
-        voiceButton.innerHTML = "🎤";
+
+        text = text.trim();
+
+
+        if (text !== "") {
+
+            input.value = text;
+
+            status.innerHTML =
+                "✅ Heard: " + text;
+        }
     };
+
+
+    /* Error handling */
 
     recognition.onerror = function(event) {
 
         voiceButton.classList.remove("listening");
+
         voiceButton.innerHTML = "🎤";
+
 
         if (event.error === "not-allowed") {
 
             status.innerHTML =
                 "❌ Microphone permission was denied.";
 
-        } else {
+        }
+        else if (event.error === "no-speech") {
 
             status.innerHTML =
-                "❌ Voice search error. Please try again.";
+                "⚠️ No speech detected. Please speak again.";
+
+        }
+        else if (event.error === "network") {
+
+            status.innerHTML =
+                "❌ Network error. Check your internet connection.";
+
+        }
+        else {
+
+            status.innerHTML =
+                "❌ Voice error: " + event.error;
         }
     };
+
+
+    /* When listening finishes */
 
     recognition.onend = function() {
 
         voiceButton.classList.remove("listening");
+
         voiceButton.innerHTML = "🎤";
+
     };
+
+
+    /* Start recognition LAST */
+
+    try {
+
+        recognition.start();
+
+    }
+    catch (error) {
+
+        status.innerHTML =
+            "⚠️ Voice search is already running. Please wait.";
+    }
+
 }
 
 </script>
