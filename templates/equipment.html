@@ -74,6 +74,10 @@
             text-decoration: none;
             font-weight: bold;
         }
+
+        form {
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -88,6 +92,7 @@
 
 <div class="products">
 
+    <!-- Water Pump -->
     <div class="product">
         <div class="emoji-image">💧</div>
 
@@ -96,11 +101,15 @@
 
         <h3>₹5,000</h3>
 
-        <a href="/add-to-cart/Water%20Pump/5000">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Water Pump">
+            <input type="hidden" name="price" value="5000">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
+
+    <!-- Seed Drill -->
     <div class="product">
         <div class="emoji-image">🌾</div>
 
@@ -109,11 +118,15 @@
 
         <h3>₹8,000</h3>
 
-        <a href="/add-to-cart/Seed%20Drill/8000">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Seed Drill">
+            <input type="hidden" name="price" value="8000">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
+
+    <!-- Mini Cultivator -->
     <div class="product">
         <div class="emoji-image">🚜</div>
 
@@ -122,11 +135,15 @@
 
         <h3>₹12,000</h3>
 
-        <a href="/add-to-cart/Mini%20Cultivator/12000">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Mini Cultivator">
+            <input type="hidden" name="price" value="12000">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
+
+    <!-- Sprayer -->
     <div class="product">
         <div class="emoji-image">💦</div>
 
@@ -135,9 +152,11 @@
 
         <h3>₹3,500</h3>
 
-        <a href="/add-to-cart/Sprayer/3500">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Sprayer">
+            <input type="hidden" name="price" value="3500">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
 </div>
