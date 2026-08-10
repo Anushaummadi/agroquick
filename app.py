@@ -842,4 +842,4 @@ def add_to_cart():
 
     session["cart"] = cart_items
 
-    retu
+    return
