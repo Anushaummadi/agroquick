@@ -116,7 +116,7 @@ def fertilizer():
 
 @app.route("/equipment")
 def equipment():
-    return render_template("Equipment.html")
+    return render_template("equipment.html")
 
 
 @app.route("/tools")
