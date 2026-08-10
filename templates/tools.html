@@ -74,6 +74,10 @@
             text-decoration: none;
             font-weight: bold;
         }
+
+        form {
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -88,6 +92,7 @@
 
 <div class="products">
 
+    <!-- Hand Hoe -->
     <div class="product">
         <div class="emoji-image">🔨</div>
 
@@ -96,11 +101,15 @@
 
         <h3>₹450</h3>
 
-        <a href="/add-to-cart/Hand%20Hoe/450">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Hand Hoe">
+            <input type="hidden" name="price" value="450">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
+
+    <!-- Pruning Shears -->
     <div class="product">
         <div class="emoji-image">✂️</div>
 
@@ -109,11 +118,15 @@
 
         <h3>₹350</h3>
 
-        <a href="/add-to-cart/Pruning%20Shears/350">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Pruning Shears">
+            <input type="hidden" name="price" value="350">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
+
+    <!-- Watering Can -->
     <div class="product">
         <div class="emoji-image">🪣</div>
 
@@ -122,11 +135,15 @@
 
         <h3>₹250</h3>
 
-        <a href="/add-to-cart/Watering%20Can/250">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Watering Can">
+            <input type="hidden" name="price" value="250">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
+
+    <!-- Hand Cultivator -->
     <div class="product">
         <div class="emoji-image">🌱</div>
 
@@ -135,9 +152,11 @@
 
         <h3>₹300</h3>
 
-        <a href="/add-to-cart/Hand%20Cultivator/300">
-            <button>Add to Cart</button>
-        </a>
+        <form action="/add-to-cart" method="POST">
+            <input type="hidden" name="product" value="Hand Cultivator">
+            <input type="hidden" name="price" value="300">
+            <button type="submit">Add to Cart</button>
+        </form>
     </div>
 
 </div>
