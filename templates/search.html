@@ -128,6 +128,7 @@
     <p>Type or speak to find agricultural products</p>
 </header>
 
+
 <div class="search-box">
 
     <form action="/search" method="GET">
@@ -155,6 +156,7 @@
         </button>
 
     </form>
+
 
     <div class="language-box">
 
@@ -192,6 +194,7 @@
 
     </div>
 
+
     <div id="voiceStatus"></div>
 
 </div>
@@ -225,6 +228,7 @@
 
 </div>
 
+
 {% elif query %}
 
 <div style="text-align:center; padding:40px;">
@@ -255,20 +259,25 @@
 
 <script>
 
+let recognition = null;
+let isListening = false;
+
+
 function startVoiceSearch() {
 
     const SpeechRecognition =
         window.SpeechRecognition ||
         window.webkitSpeechRecognition;
 
-    const voiceButton =
+
+    const input =
+        document.getElementById("searchInput");
+
+    const button =
         document.getElementById("voiceButton");
 
     const status =
         document.getElementById("voiceStatus");
-
-    const input =
-        document.getElementById("searchInput");
 
     const language =
         document.getElementById("language").value;
@@ -279,42 +288,65 @@ function startVoiceSearch() {
     if (!SpeechRecognition) {
 
         status.innerHTML =
-            "❌ Voice search is not supported in this browser. Please use Google Chrome.";
+            "❌ Voice search is not supported. Please use Google Chrome.";
 
         return;
     }
 
 
-    const recognition =
-        new SpeechRecognition();
+    /* Stop if already listening */
+
+    if (isListening) {
+
+        recognition.stop();
+
+        return;
+    }
 
 
-    /* Voice settings */
+    /* Create recognition */
+
+    recognition = new SpeechRecognition();
+
 
     recognition.lang = language;
 
     recognition.continuous = false;
 
-    recognition.interimResults = true;
+    recognition.interimResults = false;
 
     recognition.maxAlternatives = 1;
 
 
-    /* Start UI */
+    isListening = true;
 
-    voiceButton.classList.add("listening");
 
-    voiceButton.innerHTML = "🔴";
+    /* Change microphone button */
+
+    button.classList.add("listening");
+
+    button.innerHTML = "🔴";
+
 
     status.innerHTML =
-        "🎤 Listening... Speak clearly.";
+        "🎤 Listening... Speak now.";
 
 
-    /* When speech is recognized */
+    /* Recognition started */
 
-    recognition.onresult = function(event) {
+    recognition.onstart = function () {
+
+        console.log("Voice recognition started");
+
+    };
+
+
+    /* Speech result */
+
+    recognition.onresult = function (event) {
 
         let text = "";
+
 
         for (
             let i = event.resultIndex;
@@ -324,6 +356,7 @@ function startVoiceSearch() {
 
             text +=
                 event.results[i][0].transcript;
+
         }
 
 
@@ -334,69 +367,105 @@ function startVoiceSearch() {
 
             input.value = text;
 
+
             status.innerHTML =
                 "✅ Heard: " + text;
+
         }
+
     };
 
 
-    /* Error handling */
+    /* Error */
 
-    recognition.onerror = function(event) {
+    recognition.onerror = function (event) {
 
-        voiceButton.classList.remove("listening");
+        console.log(
+            "Voice recognition error:",
+            event.error
+        );
 
-        voiceButton.innerHTML = "🎤";
 
-
-        if (event.error === "not-allowed") {
-
-            status.innerHTML =
-                "❌ Microphone permission was denied.";
-
-        }
-        else if (event.error === "no-speech") {
+        if (event.error === "no-speech") {
 
             status.innerHTML =
                 "⚠️ No speech detected. Please speak again.";
 
         }
+
+        else if (event.error === "not-allowed") {
+
+            status.innerHTML =
+                "❌ Microphone permission was denied. Please allow microphone access.";
+
+        }
+
         else if (event.error === "network") {
 
             status.innerHTML =
-                "❌ Network error. Check your internet connection.";
+                "❌ Network error. Please check your internet connection.";
 
         }
+
         else {
 
             status.innerHTML =
                 "❌ Voice error: " + event.error;
+
         }
-    };
 
 
-    /* When listening finishes */
+        isListening = false;
 
-    recognition.onend = function() {
+        button.classList.remove("listening");
 
-        voiceButton.classList.remove("listening");
-
-        voiceButton.innerHTML = "🎤";
+        button.innerHTML = "🎤";
 
     };
 
 
-    /* Start recognition LAST */
+    /* Recognition ended */
+
+    recognition.onend = function () {
+
+        isListening = false;
+
+        button.classList.remove("listening");
+
+        button.innerHTML = "🎤";
+
+
+        if (input.value.trim() !== "") {
+
+            status.innerHTML =
+                "✅ Heard: " + input.value;
+
+        }
+
+    };
+
+
+    /* Start recognition */
 
     try {
 
         recognition.start();
 
     }
+
     catch (error) {
 
+        console.log(error);
+
+        isListening = false;
+
+        button.classList.remove("listening");
+
+        button.innerHTML = "🎤";
+
         status.innerHTML =
-            "⚠️ Voice search is already running. Please wait.";
+            "⚠️ Could not start voice search. Please try again.";
+
     }
 
 }
