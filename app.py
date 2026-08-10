@@ -121,7 +121,7 @@ def equipment():
 
 @app.route("/tools")
 def tools():
-    return render_template("Tools.html")
+    return render_template("tools.html")
 
 
 @app.route("/crop-care")
