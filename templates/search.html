@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AgroQuick - Search</title>
+    <title>AgroQuick - Search & Voice Search</title>
 
     <style>
         body {
@@ -25,7 +25,9 @@
         .search-box form {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .search-box input {
@@ -44,6 +46,33 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
+        }
+
+        .voice-button {
+            background: #d32f2f !important;
+            min-width: 55px;
+        }
+
+        .voice-button.listening {
+            background: #1565c0 !important;
+        }
+
+        .language-box {
+            margin-top: 15px;
+        }
+
+        .language-box select {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        #voiceStatus {
+            margin-top: 12px;
+            font-weight: bold;
+            color: #2e7d32;
+            min-height: 20px;
         }
 
         .results {
@@ -94,10 +123,9 @@
 
 <body>
 
-<!-- AgroQuick Search Page -->
-
 <header>
     <h1>🔎 AgroQuick Search</h1>
+    <p>Type or speak to find agricultural products</p>
 </header>
 
 <div class="search-box">
@@ -105,6 +133,7 @@
     <form action="/search" method="GET">
 
         <input
+            id="searchInput"
             type="text"
             name="query"
             placeholder="Search Seeds, Fertilizer, Urea..."
@@ -112,13 +141,38 @@
             required
         >
 
+        <button
+            type="button"
+            id="voiceButton"
+            class="voice-button"
+            onclick="startVoiceSearch()"
+            title="Voice Search">
+            🎤
+        </button>
+
         <button type="submit">
             Search
         </button>
 
     </form>
 
+    <div class="language-box">
+        <label for="language">🌐 Voice Language: </label>
+
+        <select id="language">
+            <option value="en-IN">English</option>
+            <option value="te-IN">తెలుగు (Telugu)</option>
+            <option value="hi-IN">हिन्दी (Hindi)</option>
+            <option value="mr-IN">मराठी (Marathi)</option>
+            <option value="ta-IN">தமிழ் (Tamil)</option>
+            <option value="kn-IN">ಕನ್ನಡ (Kannada)</option>
+        </select>
+    </div>
+
+    <div id="voiceStatus"></div>
+
 </div>
+
 
 {% if results %}
 
@@ -150,11 +204,14 @@
 
     <h2>😔 No products found</h2>
 
-    <p>Try searching for Seeds, Urea, Fertilizer or Water Pump.</p>
+    <p>
+        Try searching for Seeds, Urea, Fertilizer or Water Pump.
+    </p>
 
 </div>
 
 {% endif %}
+
 
 <div class="buttons">
 
@@ -163,6 +220,82 @@
     <a href="/cart">🛒 Cart</a>
 
 </div>
+
+
+<script>
+
+function startVoiceSearch() {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    const voiceButton = document.getElementById("voiceButton");
+    const status = document.getElementById("voiceStatus");
+    const input = document.getElementById("searchInput");
+    const language = document.getElementById("language").value;
+
+    if (!SpeechRecognition) {
+
+        status.innerHTML =
+            "❌ Voice search is not supported in this browser. Try Chrome.";
+
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = language;
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    voiceButton.classList.add("listening");
+    voiceButton.innerHTML = "🔴";
+
+    status.innerHTML = "🎤 Listening... Please speak.";
+
+    recognition.start();
+
+    recognition.onresult = function(event) {
+
+        const speechText =
+            event.results[0][0].transcript;
+
+        input.value = speechText;
+
+        status.innerHTML =
+            "✅ Heard: " + speechText;
+
+        voiceButton.classList.remove("listening");
+        voiceButton.innerHTML = "🎤";
+    };
+
+    recognition.onerror = function(event) {
+
+        voiceButton.classList.remove("listening");
+        voiceButton.innerHTML = "🎤";
+
+        if (event.error === "not-allowed") {
+
+            status.innerHTML =
+                "❌ Microphone permission was denied.";
+
+        } else {
+
+            status.innerHTML =
+                "❌ Voice search error. Please try again.";
+        }
+    };
+
+    recognition.onend = function() {
+
+        voiceButton.classList.remove("listening");
+        voiceButton.innerHTML = "🎤";
+    };
+}
+
+</script>
 
 </body>
 </html>
