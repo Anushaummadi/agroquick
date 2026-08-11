@@ -7,14 +7,14 @@ app.secret_key = "agroquick123"
 
 
 # =========================================================
-# AGROQUICK FARMING PRODUCT CATALOG
+# PRODUCT CATALOG
 # =========================================================
 
 PRODUCTS = [
 
-    # =========================
+    # =====================================================
     # SEEDS
-    # =========================
+    # =====================================================
 
     {
         "name": "Rice Seeds",
@@ -23,8 +23,8 @@ PRODUCTS = [
         "url": "/seeds",
         "keywords": [
             "rice", "paddy", "rice seed", "rice seeds",
-            "వరి", "వరి విత్తనాలు",
-            "బియ్యం", "धान", "चावल", "तांदूळ",
+            "వరి", "వరి విత్తనాలు", "బియ్యం",
+            "धान", "चावल", "तांदूळ",
             "அரிசி", "அரிசி விதைகள்", "ಅಕ್ಕಿ"
         ]
     },
@@ -37,7 +37,8 @@ PRODUCTS = [
         "keywords": [
             "wheat", "wheat seed", "wheat seeds",
             "గోధుమ", "గోధుమ విత్తనాలు",
-            "गेहूं", "गहू", "கோதுமை", "ಗೋಧಿ"
+            "गेहूं", "गहू",
+            "கோதுமை", "ಗೋಧಿ"
         ]
     },
 
@@ -49,7 +50,8 @@ PRODUCTS = [
         "keywords": [
             "maize", "corn", "maize seed", "maize seeds",
             "మొక్కజొన్న", "మొక్కజొన్న విత్తనాలు",
-            "मक्का", "மக்காச்சோளம்", "ಮೆಕ್ಕೆಜೋಳ"
+            "मक्का", "மக்காச்சோளம்",
+            "ಮೆಕ್ಕೆಜೋಳ"
         ]
     },
 
@@ -59,15 +61,18 @@ PRODUCTS = [
         "price": 80,
         "url": "/seeds",
         "keywords": [
-            "vegetable", "vegetables", "vegetable seeds",
+            "vegetable", "vegetables",
+            "vegetable seeds", "seed", "seeds",
             "కూరగాయలు", "కూరగాయల విత్తనాలు",
-            "सब्जी", "भाजी", "காய்கறி", "ತರಕಾರಿ"
+            "सब्जी", "भाजी",
+            "காய்கறி", "ತರಕಾರಿ"
         ]
     },
 
-    # =========================
+
+    # =====================================================
     # FERTILIZERS
-    # =========================
+    # =====================================================
 
     {
         "name": "Urea Fertilizer",
@@ -76,7 +81,8 @@ PRODUCTS = [
         "url": "/fertilizer",
         "keywords": [
             "urea", "urea fertilizer",
-            "యూరియా", "यूरिया", "युरिया",
+            "యూరియా",
+            "यूरिया", "युरिया",
             "யூரியா", "ಯೂರಿಯಾ"
         ]
     },
@@ -101,16 +107,22 @@ PRODUCTS = [
         "price": 350,
         "url": "/fertilizer",
         "keywords": [
-            "organic manure", "manure", "organic fertilizer",
-            "సేంద్రీయ ఎరువు", "సేంద్రియ ఎరువు",
-            "जैविक खाद", "सेंद्रिय खत",
-            "இயற்கை உரம்", "ಸಾವಯವ ಗೊಬ್ಬರ"
+            "organic manure",
+            "organic fertilizer",
+            "manure",
+            "సేంద్రీయ ఎరువు",
+            "సేంద్రియ ఎరువు",
+            "जैविक खाद",
+            "सेंद्रिय खत",
+            "இயற்கை உரம்",
+            "ಸಾವಯವ ಗೊಬ್ಬರ"
         ]
     },
 
-    # =========================
+
+    # =====================================================
     # IRRIGATION
-    # =========================
+    # =====================================================
 
     {
         "name": "Water Pump",
@@ -118,12 +130,20 @@ PRODUCTS = [
         "price": 2500,
         "url": "/equipment",
         "keywords": [
-            "water pump", "pump", "water motor",
-            "irrigation", "watering field",
-            "నీటి పంపు", "నీటి మోటార్", "పారుదల",
-            "पानी का पंप", "सिंचाई",
+            "water pump",
+            "pump",
+            "water motor",
+            "irrigation",
+            "watering field",
+            "water field",
+            "నీటి పంపు",
+            "నీటి మోటార్",
+            "పారుదల",
+            "पानी का पंप",
+            "सिंचाई",
             "पाण्याचा पंप",
-            "தண்ணீர் பம்ப்", "நீர்ப்பாசனம்",
+            "தண்ணீர் பம்ப்",
+            "நீர்ப்பாசனம்",
             "ನೀರಿನ ಪಂಪ್"
         ]
     },
@@ -134,10 +154,15 @@ PRODUCTS = [
         "price": 1800,
         "url": "/equipment",
         "keywords": [
-            "drip", "drip irrigation", "irrigation kit",
-            "నీటి బిందు పద్ధతి", "డ్రిప్",
-            "ड्रिप सिंचाई", "ठिबक सिंचन",
-            "சொட்டு நீர்", "ಹನಿ ನೀರಾವರಿ"
+            "drip",
+            "drip irrigation",
+            "irrigation kit",
+            "నీటి బిందు పద్ధతి",
+            "డ్రిప్",
+            "ड्रिप सिंचाई",
+            "ठिबक सिंचन",
+            "சொட்டு நீர்",
+            "ಹನಿ ನೀರಾವರಿ"
         ]
     },
 
@@ -147,17 +172,20 @@ PRODUCTS = [
         "price": 1200,
         "url": "/equipment",
         "keywords": [
-            "sprinkler", "sprinkler irrigation",
-            "స్ప్రింక్లర్", "స్ప్రింక్లర్ నీరుపారుదల",
-            "स्प्रिंकलर", "तुषार सिंचन",
+            "sprinkler",
+            "sprinkler irrigation",
+            "స్ప్రింక్లర్",
+            "स्प्रिंकलर",
+            "तुषार सिंचन",
             "தெளிப்பு நீர்ப்பாசனம்",
             "ಸ್ಪ್ರಿಂಕ್ಲರ್"
         ]
     },
 
-    # =========================
+
+    # =====================================================
     # EQUIPMENT
-    # =========================
+    # =====================================================
 
     {
         "name": "Seed Drill",
@@ -165,11 +193,18 @@ PRODUCTS = [
         "price": 8000,
         "url": "/equipment",
         "keywords": [
-            "seed drill", "planting", "sowing",
-            "seed planting", "sowing machine",
-            "విత్తడం", "విత్తనాలు వేయడం",
-            "बुवाई", "बीज बोना",
-            "पेरणी", "விதைப்பு", "ಬಿತ್ತನೆ"
+            "seed drill",
+            "planting",
+            "sowing",
+            "seed planting",
+            "sowing machine",
+            "విత్తడం",
+            "విత్తనాలు వేయడం",
+            "बुवाई",
+            "बीज बोना",
+            "पेरणी",
+            "விதைப்பு",
+            "ಬಿತ್ತನೆ"
         ]
     },
 
@@ -179,13 +214,22 @@ PRODUCTS = [
         "price": 12000,
         "url": "/equipment",
         "keywords": [
-            "cultivator", "cultivation",
-            "soil cultivation", "plough", "plowing",
-            "నేల", "నేల సాగు",
-            "मिट्टी", "जुताई",
-            "माती", "नांगरणी",
-            "மண்", "உழவு",
-            "ಮಣ್ಣು", "ಉಳುಮೆ"
+            "cultivator",
+            "cultivation",
+            "soil cultivation",
+            "plough",
+            "plowing",
+            "ploughing",
+            "నేల",
+            "నేల సాగు",
+            "मिट्टी",
+            "जुताई",
+            "माती",
+            "नांगरणी",
+            "மண்",
+            "உழவு",
+            "ಮಣ್ಣು",
+            "ಉಳುಮೆ"
         ]
     },
 
@@ -195,18 +239,25 @@ PRODUCTS = [
         "price": 3500,
         "url": "/equipment",
         "keywords": [
-            "sprayer", "spraying", "spray",
-            "crop spraying", "pesticide spraying",
-            "స్ప్రేయర్", "పిచికారీ",
-            "स्प्रे", "छिड़काव",
+            "sprayer",
+            "spraying",
+            "spray",
+            "crop spraying",
+            "pesticide spraying",
+            "స్ప్రేయర్",
+            "పిచికారీ",
+            "स्प्रे",
+            "छिड़काव",
             "फवारणी",
-            "தெளிப்பான்", "ಸಿಂಪಡಣೆ"
+            "தெளிப்பான்",
+            "ಸಿಂಪಡಣೆ"
         ]
     },
 
-    # =========================
+
+    # =====================================================
     # TOOLS
-    # =========================
+    # =====================================================
 
     {
         "name": "Hand Hoe",
@@ -214,11 +265,19 @@ PRODUCTS = [
         "price": 450,
         "url": "/tools",
         "keywords": [
-            "hoe", "hand hoe", "digging",
-            "dig soil", "soil preparation",
-            "మట్టి తవ్వడం", "మట్టి",
-            "खुदाई", "मिट्टी",
-            "खोदणे", "தோண்டுதல்",
+            "hoe",
+            "hand hoe",
+            "dig",
+            "digging",
+            "dig soil",
+            "soil preparation",
+            "మట్టి తవ్వడం",
+            "మట్టి",
+            "ఖననం",
+            "खुदाई",
+            "मिट्टी",
+            "खोदणे",
+            "தோண்டுதல்",
             "ಮಣ್ಣು ಅಗೆಯುವುದು"
         ]
     },
@@ -229,11 +288,20 @@ PRODUCTS = [
         "price": 550,
         "url": "/tools",
         "keywords": [
-            "gaddapara", "gaddapara tool",
-            "digging bar", "digging tool",
-            "soil digging", "dig ground",
-            "గడ్డపార", "గడ్డ పార",
-            "खुदाई औजार", "खोदने का औजार",
+            "gaddapara",
+            "gaddapara tool",
+            "gaddapara farming tool",
+            "digging bar",
+            "digging tool",
+            "dig soil",
+            "dig ground",
+            "soil digging",
+            "ground digging",
+            "గడ్డపార",
+            "గడ్డ పార",
+            "గడ్డపారా",
+            "खुदाई औजार",
+            "खोदने का औजार",
             "जमीन खोदणे"
         ]
     },
@@ -244,10 +312,16 @@ PRODUCTS = [
         "price": 350,
         "url": "/tools",
         "keywords": [
-            "pruning", "pruning shears",
-            "cut branches", "trim plants",
+            "pruning",
+            "pruning shears",
+            "cut branches",
+            "cutting branches",
+            "trim plants",
+            "cut plants",
             "కొమ్మలు కత్తిరించడం",
-            "पौधे काटना", "शाखाएं काटना",
+            "పంట కొమ్మలు",
+            "पौधे काटना",
+            "शाखाएं काटना",
             "फांद्या कापणे",
             "கிளைகளை வெட்ட",
             "ಕೊಂಬೆಗಳನ್ನು ಕತ್ತರಿಸುವುದು"
@@ -260,8 +334,10 @@ PRODUCTS = [
         "price": 300,
         "url": "/tools",
         "keywords": [
-            "hand cultivator", "cultivator",
-            "loosen soil", "soil tool",
+            "hand cultivator",
+            "cultivator",
+            "loosen soil",
+            "soil tool",
             "మట్టి సడలించడం",
             "मिट्टी ढीली करना",
             "மண் உழவு",
@@ -275,9 +351,11 @@ PRODUCTS = [
         "price": 250,
         "url": "/tools",
         "keywords": [
-            "watering can", "water plants",
+            "watering can",
+            "water plants",
             "watering",
-            "మొక్కలకు నీరు", "నీరు పోయడం",
+            "మొక్కలకు నీరు",
+            "నీరు పోయడం",
             "पानी देना",
             "रोपांना पाणी",
             "செடிகளுக்கு தண்ணீர்",
@@ -285,9 +363,10 @@ PRODUCTS = [
         ]
     },
 
-    # =========================
+
+    # =====================================================
     # CROP CARE
-    # =========================
+    # =====================================================
 
     {
         "name": "Plant Growth Support",
@@ -295,11 +374,16 @@ PRODUCTS = [
         "price": 250,
         "url": "/crop-care",
         "keywords": [
-            "plant growth", "crop growth",
-            "growth support", "plant care",
-            "పంట పెరుగుదల", "మొక్కల పెరుగుదల",
-            "फसल वृद्धि", "पौधों की वृद्धि",
-            "பயிர் வளர்ச்சி", "ಬೆಳೆ ಬೆಳವಣಿಗೆ"
+            "plant growth",
+            "crop growth",
+            "growth support",
+            "plant care",
+            "పంట పెరుగుదల",
+            "మొక్కల పెరుగుదల",
+            "फसल वृद्धि",
+            "पौधों की वृद्धि",
+            "பயிர் வளர்ச்சி",
+            "ಬೆಳೆ ಬೆಳವಣಿಗೆ"
         ]
     },
 
@@ -309,11 +393,16 @@ PRODUCTS = [
         "price": 300,
         "url": "/crop-care",
         "keywords": [
-            "neem", "neem crop care",
-            "neem based", "plant care",
-            "వేప", "వేప ఆధారిత",
-            "नीम", "नीम आधारित",
-            "வேம்பு", "ಬೇವಿನ"
+            "neem",
+            "neem crop care",
+            "neem based",
+            "plant care",
+            "వేప",
+            "వేప ఆధారిత",
+            "नीम",
+            "नीम आधारित",
+            "வேம்பு",
+            "ಬೇವಿನ"
         ]
     },
 
@@ -323,8 +412,10 @@ PRODUCTS = [
         "price": 400,
         "url": "/crop-care",
         "keywords": [
-            "micronutrient", "micro nutrient",
-            "plant nutrients", "crop nutrients",
+            "micronutrient",
+            "micro nutrient",
+            "plant nutrients",
+            "crop nutrients",
             "సూక్ష్మ పోషకాలు",
             "सूक्ष्म पोषक तत्व",
             "सूक्ष्म अन्नद्रव्ये",
@@ -339,10 +430,14 @@ PRODUCTS = [
         "price": 350,
         "url": "/crop-care",
         "keywords": [
-            "crop booster", "growth booster",
-            "plant booster", "crop growth",
-            "పంట బూస్టర్", "పంట పెరుగుదల",
-            "फसल बूस्टर", "पीक वाढ",
+            "crop booster",
+            "growth booster",
+            "plant booster",
+            "crop growth",
+            "పంట బూస్టర్",
+            "పంట పెరుగుదల",
+            "फसल बूस्टर",
+            "पीक वाढ",
             "பயிர் வளர்ச்சி",
             "ಬೆಳೆ ಬೆಳವಣಿಗೆ"
         ]
@@ -358,7 +453,7 @@ FARMING_INFO = {
 
     "irrigation": {
         "title": "Irrigation & Water Management",
-        "text": "Choose an appropriate irrigation method according to the crop, soil and field conditions."
+        "text": "Choose an irrigation method according to the crop, soil and field conditions."
     },
 
     "soil": {
@@ -368,7 +463,7 @@ FARMING_INFO = {
 
     "seeds": {
         "title": "Seed Selection",
-        "text": "Select suitable seeds according to the crop, season, local conditions and recommended agricultural practices."
+        "text": "Choose suitable seeds according to the crop, season, local conditions and recommended agricultural practices."
     },
 
     "crop care": {
@@ -442,9 +537,9 @@ def search():
 
     if query:
 
-        # ---------------------------------------------
-        # Exact/keyword product search
-        # ---------------------------------------------
+        # -------------------------------------------------
+        # DIRECT PRODUCT / CATEGORY / KEYWORD SEARCH
+        # -------------------------------------------------
 
         for product in PRODUCTS:
 
@@ -455,54 +550,138 @@ def search():
             ])
 
             if query in searchable_text:
-                results.append(product)
 
-        # ---------------------------------------------
-        # Farmer-style request matching
-        # ---------------------------------------------
+                if product not in results:
+                    results.append(product)
+
+
+        # -------------------------------------------------
+        # FARMER REQUEST GROUPS
+        # -------------------------------------------------
 
         request_groups = {
 
-            "water": [
-                "water", "watering", "irrigation",
-                "నీరు", "నీటితో", "పారుదల",
-                "पानी", "सिंचाई",
-                "தண்ணீர்", "நீர்ப்பாசனம்"
+            "digging": [
+                "dig",
+                "digging",
+                "digging tool",
+                "dig tool",
+                "dig soil",
+                "dig ground",
+                "dig the soil",
+                "soil digging",
+                "ground digging",
+                "gaddapara",
+                "gaddapara tool",
+                "గడ్డపార",
+                "గడ్డ పార",
+                "గడ్డపారా",
+                "खुदाई",
+                "खोदने का औजार"
             ],
 
-            "digging": [
-                "dig", "digging", "ground",
-                "soil", "land preparation",
-                "తవ్వ", "మట్టి", "నేల",
-                "खुदाई", "मिट्टी",
-                "மண்", "தோண்ட",
-                "ಮಣ್ಣು", "ಅಗೆಯ"
+            "watering": [
+                "water",
+                "watering",
+                "water field",
+                "water farm",
+                "water plants",
+                "irrigation",
+                "water pump",
+                "నీరు",
+                "నీటి",
+                "నీటితో",
+                "పారుదల",
+                "पानी",
+                "सिंचाई",
+                "தண்ணீர்",
+                "நீர்ப்பாசனம்",
+                "ನೀರು",
+                "ನೀರಾವರಿ"
             ],
 
             "planting": [
-                "plant", "planting", "sowing",
-                "seed", "విత్త", "నాట",
-                "बुवाई", "पेरणी",
-                "விதைப்பு", "ಬಿತ್ತನೆ"
-            ],
-
-            "crop": [
-                "crop", "plant", "field",
-                "పంట", "మొక్క",
-                "फसल", "पौधा",
-                "பயிர்", "சாகுபடி",
-                "ಬೆಳೆ"
+                "plant",
+                "planting",
+                "sowing",
+                "seed planting",
+                "plant seeds",
+                "విత్తడం",
+                "నాటడం",
+                "విత్తనాలు వేయడం",
+                "बुवाई",
+                "पेरणी",
+                "விதைப்பு",
+                "ಬಿತ್ತನೆ"
             ],
 
             "cutting": [
-                "cut", "cutting", "branch",
-                "prune", "trim",
-                "కత్తిర", "కొమ్మ",
-                "काट", "छाटणी",
+                "cut",
+                "cutting",
+                "branch",
+                "branches",
+                "prune",
+                "pruning",
+                "trim",
+                "కొమ్మ",
+                "కత్తిర",
+                "पौधे काट",
+                "शाखा",
+                "छाटणी",
                 "வெட்ட",
+                "கிளை",
                 "ಕತ್ತರ"
+            ],
+
+            "crop-care": [
+                "crop care",
+                "crop growth",
+                "plant growth",
+                "plant care",
+                "crop problem",
+                "పంట సంరక్షణ",
+                "పంట పెరుగుదల",
+                "మొక్కల పెరుగుదల",
+                "फसल देखभाल",
+                "फसल वृद्धि",
+                "பயிர் பராமரிப்பு",
+                "ಬೆಳೆ ಆರೈಕೆ"
+            ],
+
+            "seeds": [
+                "seed",
+                "seeds",
+                "విత్తనం",
+                "విత్తనాలు",
+                "बीज",
+                "बियाणे",
+                "விதை",
+                "விதைகள்",
+                "ಬೀಜ",
+                "ಬೀಜಗಳು"
+            ],
+
+            "fertilizer": [
+                "fertilizer",
+                "fertilizers",
+                "urea",
+                "manure",
+                "ఎరువు",
+                "ఎరువులు",
+                "యూరియా",
+                "खाद",
+                "उर्वरक",
+                "खत",
+                "உரம்",
+                "ரசாயன உரம்",
+                "ಗೊಬ್ಬರ"
             ]
         }
+
+
+        # -------------------------------------------------
+        # FIND MATCHED REQUEST GROUPS
+        # -------------------------------------------------
 
         matched_groups = []
 
@@ -511,47 +690,143 @@ def search():
             for word in words:
 
                 if word in query:
-                    matched_groups.append(group)
+
+                    if group not in matched_groups:
+                        matched_groups.append(group)
+
                     break
 
-        # Add related products for farmer-style requests
 
-        if "water" in matched_groups:
-            for product in PRODUCTS:
-                if product["category"] == "Irrigation" and product not in results:
-                    results.append(product)
+        # -------------------------------------------------
+        # DIGGING REQUEST
+        # -------------------------------------------------
 
         if "digging" in matched_groups:
+
             for product in PRODUCTS:
-                if product["category"] == "Tools" and (
-                    "dig" in product["name"].lower()
-                    or "hoe" in product["name"].lower()
-                    or "cultivator" in product["name"].lower()
-                    or "gaddapara" in product["name"].lower()
+
+                product_text = " ".join([
+                    product["name"].lower(),
+                    product["category"].lower(),
+                    " ".join(product["keywords"]).lower()
+                ])
+
+                digging_words = [
+                    "gaddapara",
+                    "గడ్డపార",
+                    "గడ్డ పార",
+                    "గడ్డపారా",
+                    "dig",
+                    "digging",
+                    "hoe",
+                    "soil",
+                    "cultivator"
+                ]
+
+                if any(
+                    word in product_text
+                    for word in digging_words
                 ):
+
                     if product not in results:
                         results.append(product)
+
+
+        # -------------------------------------------------
+        # WATERING REQUEST
+        # -------------------------------------------------
+
+        if "watering" in matched_groups:
+
+            for product in PRODUCTS:
+
+                if product["category"] == "Irrigation":
+
+                    if product not in results:
+                        results.append(product)
+
+
+        # -------------------------------------------------
+        # PLANTING REQUEST
+        # -------------------------------------------------
 
         if "planting" in matched_groups:
+
             for product in PRODUCTS:
+
                 if (
                     product["category"] == "Seeds"
-                    or "Seed Drill" in product["name"]
+                    or product["name"] == "Seed Drill"
                 ):
+
                     if product not in results:
                         results.append(product)
 
-        if "crop" in matched_groups:
-            for product in PRODUCTS:
-                if product["category"] == "Crop Care":
-                    if product not in results:
-                        results.append(product)
+
+        # -------------------------------------------------
+        # CUTTING REQUEST
+        # -------------------------------------------------
 
         if "cutting" in matched_groups:
+
             for product in PRODUCTS:
-                if "Pruning" in product["name"]:
+
+                product_text = " ".join([
+                    product["name"].lower(),
+                    " ".join(product["keywords"]).lower()
+                ])
+
+                if (
+                    "pruning" in product_text
+                    or "trim" in product_text
+                    or "cut branches" in product_text
+                ):
+
                     if product not in results:
                         results.append(product)
+
+
+        # -------------------------------------------------
+        # CROP CARE REQUEST
+        # -------------------------------------------------
+
+        if "crop-care" in matched_groups:
+
+            for product in PRODUCTS:
+
+                if product["category"] == "Crop Care":
+
+                    if product not in results:
+                        results.append(product)
+
+
+        # -------------------------------------------------
+        # SEED REQUEST
+        # -------------------------------------------------
+
+        if "seeds" in matched_groups:
+
+            for product in PRODUCTS:
+
+                if product["category"] == "Seeds":
+
+                    if product not in results:
+                        results.append(product)
+
+
+        # -------------------------------------------------
+        # FERTILIZER REQUEST
+        # -------------------------------------------------
+
+        if "fertilizer" in matched_groups:
+
+            for product in PRODUCTS:
+
+                if product["category"] == "Fertilizer":
+
+                    if product not in results:
+                        results.append(product)
+
 
     return render_template(
         "search.html",
@@ -561,19 +836,25 @@ def search():
 
 
 # =========================================================
-# FARMING INFORMATION SEARCH
+# FARMING INFORMATION
 # =========================================================
 
 @app.route("/farming-info")
 def farming_info():
 
-    topic = request.args.get("topic", "").strip().lower()
+    topic = request.args.get(
+        "topic",
+        ""
+    ).strip().lower()
 
     information = None
 
     if topic:
+
         for key, value in FARMING_INFO.items():
+
             if key in topic or topic in key:
+
                 information = value
                 break
 
@@ -619,7 +900,10 @@ def crop_care():
 @app.route("/cart")
 def cart():
 
-    cart_items = session.get("cart", [])
+    cart_items = session.get(
+        "cart",
+        []
+    )
 
     total = 0
 
@@ -641,7 +925,10 @@ def cart():
 # ADD TO CART - POST
 # =========================================================
 
-@app.route("/add-to-cart", methods=["POST"])
+@app.route(
+    "/add-to-cart",
+    methods=["POST"]
+)
 def add_to_cart():
 
     product = request.form.get(
@@ -654,7 +941,10 @@ def add_to_cart():
         "0"
     )
 
-    add_product_to_cart(product, price)
+    add_product_to_cart(
+        product,
+        price
+    )
 
     return redirect("/cart")
 
@@ -662,51 +952,83 @@ def add_to_cart():
 # =========================================================
 # ADD TO CART - GET
 #
-# This fixes the 404 from crop-care/tools pages
+# Supports your existing links:
+# /add-to-cart/Product/250
 # =========================================================
 
-@app.route("/add-to-cart/<path:product>/<price>")
-def add_to_cart_get(product, price):
+@app.route(
+    "/add-to-cart/<path:product>/<price>"
+)
+def add_to_cart_get(
+    product,
+    price
+):
 
     product = unquote(product)
 
-    add_product_to_cart(product, price)
+    add_product_to_cart(
+        product,
+        price
+    )
 
     return redirect("/cart")
 
 
 # =========================================================
-# COMMON CART FUNCTION
+# COMMON ADD TO CART FUNCTION
 # =========================================================
 
-def add_product_to_cart(product, price):
+def add_product_to_cart(
+    product,
+    price
+):
 
     try:
+
         price = float(price)
-    except (ValueError, TypeError):
+
+    except (
+        ValueError,
+        TypeError
+    ):
+
         price = 0
 
-    cart_items = session.get("cart", [])
+
+    cart_items = session.get(
+        "cart",
+        []
+    )
 
     found = False
+
 
     for item in cart_items:
 
         if item["product"] == product:
 
             item["quantity"] += 1
+
             found = True
+
             break
+
 
     if not found:
 
         cart_items.append({
+
             "product": product,
+
             "price": price,
+
             "quantity": 1
+
         })
 
+
     session["cart"] = cart_items
+
     session.modified = True
 
 
@@ -717,13 +1039,18 @@ def add_product_to_cart(product, price):
 @app.route("/increase/<int:index>")
 def increase(index):
 
-    cart_items = session.get("cart", [])
+    cart_items = session.get(
+        "cart",
+        []
+    )
 
     if 0 <= index < len(cart_items):
 
         cart_items[index]["quantity"] += 1
 
+
     session["cart"] = cart_items
+
     session.modified = True
 
     return redirect("/cart")
@@ -736,7 +1063,10 @@ def increase(index):
 @app.route("/decrease/<int:index>")
 def decrease(index):
 
-    cart_items = session.get("cart", [])
+    cart_items = session.get(
+        "cart",
+        []
+    )
 
     if 0 <= index < len(cart_items):
 
@@ -748,7 +1078,9 @@ def decrease(index):
 
             cart_items.pop(index)
 
+
     session["cart"] = cart_items
+
     session.modified = True
 
     return redirect("/cart")
@@ -758,16 +1090,23 @@ def decrease(index):
 # REMOVE FROM CART
 # =========================================================
 
-@app.route("/remove-from-cart/<int:index>")
+@app.route(
+    "/remove-from-cart/<int:index>"
+)
 def remove_from_cart(index):
 
-    cart_items = session.get("cart", [])
+    cart_items = session.get(
+        "cart",
+        []
+    )
 
     if 0 <= index < len(cart_items):
 
         cart_items.pop(index)
 
+
     session["cart"] = cart_items
+
     session.modified = True
 
     return redirect("/cart")
@@ -780,7 +1119,10 @@ def remove_from_cart(index):
 @app.route("/checkout")
 def checkout():
 
-    cart_items = session.get("cart", [])
+    cart_items = session.get(
+        "cart",
+        []
+    )
 
     total = 0
 
@@ -802,16 +1144,35 @@ def checkout():
 # PLACE ORDER
 # =========================================================
 
-@app.route("/place-order", methods=["POST"])
+@app.route(
+    "/place-order",
+    methods=["POST"]
+)
 def place_order():
 
-    name = request.form.get("name", "").strip()
-    mobile = request.form.get("mobile", "").strip()
-    address = request.form.get("address", "").strip()
+    name = request.form.get(
+        "name",
+        ""
+    ).strip()
 
-    cart_items = session.get("cart", [])
+    mobile = request.form.get(
+        "mobile",
+        ""
+    ).strip()
+
+    address = request.form.get(
+        "address",
+        ""
+    ).strip()
+
+
+    cart_items = session.get(
+        "cart",
+        []
+    )
 
     total = 0
+
 
     for item in cart_items:
 
@@ -820,17 +1181,24 @@ def place_order():
             * int(item["quantity"])
         )
 
+
     session["order"] = {
 
         "name": name,
+
         "mobile": mobile,
+
         "address": address,
+
         "items": cart_items,
+
         "total": total
 
     }
 
+
     session["cart"] = []
+
 
     return redirect("/orders")
 
@@ -842,7 +1210,9 @@ def place_order():
 @app.route("/orders")
 def orders():
 
-    order = session.get("order")
+    order = session.get(
+        "order"
+    )
 
     return render_template(
         "orders.html",
@@ -857,11 +1227,13 @@ def orders():
 @app.route("/delivery")
 def delivery():
 
-    return render_template("Delivery.html")
+    return render_template(
+        "Delivery.html"
+    )
 
 
 # =========================================================
-# RUN APP
+# START APPLICATION
 # =========================================================
 
 if __name__ == "__main__":
