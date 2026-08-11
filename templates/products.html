@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ product.name }} - AgroQuick</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f2;
+        }
+
+        header {
+            background: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .product-page {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px #ccc;
+        }
+
+        .product-image {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            object-fit: contain;
+            display: block;
+            margin: auto;
+        }
+
+        h1 {
+            color: #2e7d32;
+        }
+
+        .price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e65100;
+        }
+
+        .category {
+            color: #555;
+            font-size: 18px;
+        }
+
+        .description {
+            line-height: 1.7;
+            color: #333;
+        }
+
+        .info {
+            background: #f1f8e9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .buttons {
+            margin-top: 25px;
+        }
+
+        button,
+        .back {
+            border: none;
+            padding: 13px 22px;
+            border-radius: 7px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        button {
+            background: #2e7d32;
+        }
+
+        .back {
+            background: #757575;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🌾 AgroQuick</h1>
+    <p>Farming Products Marketplace</p>
+</header>
+
+<div class="product-page">
+
+    <img
+        class="product-image"
+        src="{{ product.image }}"
+        alt="{{ product.name }}"
+    >
+
+    <h1>{{ product.name }}</h1>
+
+    <p class="category">
+        Category: {{ product.category }}
+    </p>
+
+    <p class="price">
+        ₹{{ product.price }}
+    </p>
+
+    <div class="info">
+
+        <h2>Product Description</h2>
+
+        <p class="description">
+            {{ product.description }}
+        </p>
+
+        <h2>Uses</h2>
+
+        <p>
+            {{ product.uses }}
+        </p>
+
+        <h2>Specifications</h2>
+
+        <p>
+            {{ product.specifications }}
+        </p>
+
+        <h2>Availability</h2>
+
+        <p>
+            {{ product.stock }}
+        </p>
+
+    </div>
+
+    <div class="buttons">
+
+        <form action="/add-to-cart" method="POST" style="display:inline;">
+
+            <input
+                type="hidden"
+                name="product"
+                value="{{ product.name }}"
+            >
+
+            <input
+                type="hidden"
+                name="price"
+                value="{{ product.price }}"
+            >
+
+            <button type="submit">
+                🛒 Add to Cart
+            </button>
+
+        </form>
+
+        <a class="back" href="/search">
+            🔎 Back to Search
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
