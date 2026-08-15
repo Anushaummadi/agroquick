@@ -1527,6 +1527,23 @@ def orders():
     )
 
 
+
+@app.route("/delete-order/<int:order_id>", methods=["POST"])
+@location_required
+def delete_order(order_id):
+    db = get_db()
+
+    db.execute(
+        "DELETE FROM orders WHERE id=? AND user_id=?",
+        (order_id, session["user_id"])
+    )
+
+    db.commit()
+    db.close()
+
+    flash("Order deleted successfully.", "success")
+    return redirect(url_for("orders"))
+
 @app.route("/order/<int:order_id>")
 @location_required
 def order_detail(order_id):
@@ -1778,4 +1795,5 @@ if __name__ == "__main__":
         port=int(os.environ.get("PORT", 5000)),
         debug=True
     )
+
 

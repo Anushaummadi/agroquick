@@ -1,433 +1,645 @@
+```html
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
-<title>AgroQuick - My Orders</title>
+    <title>My Orders - AgroQuick</title>
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f4f7f4;
-        color: #222;
-    }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f4;
+            color: #333;
+        }
 
-    nav {
-        background: #16823a;
-        padding: 16px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
+        header {
+            background: #198754;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-    .logo {
-        color: white;
-        text-decoration: none;
-        font-size: 26px;
-        font-weight: bold;
-    }
-
-    .nav-links {
-        display: flex;
-        gap: 20px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .nav-links a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    .cart {
-        background: white;
-        color: #16823a !important;
-        padding: 9px 15px;
-        border-radius: 20px;
-    }
-
-    .container {
-        width: 92%;
-        max-width: 1100px;
-        margin: 35px auto;
-    }
-
-    h1 {
-        text-align: center;
-        color: #16823a;
-        margin-bottom: 30px;
-    }
-
-    .welcome {
-        background: white;
-        padding: 18px;
-        border-radius: 12px;
-        margin-bottom: 25px;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.07);
-    }
-
-    .order-card {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        margin-bottom: 22px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    }
-
-    .order-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-        flex-wrap: wrap;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 15px;
-    }
-
-    .order-id {
-        font-size: 20px;
-        font-weight: bold;
-        color: #16823a;
-    }
-
-    .status {
-        background: #e8f5e9;
-        color: #176b2d;
-        padding: 8px 14px;
-        border-radius: 20px;
-        font-weight: bold;
-    }
-
-    .order-info {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        margin-top: 18px;
-    }
-
-    .info-box {
-        background: #f7f9f7;
-        padding: 14px;
-        border-radius: 9px;
-    }
-
-    .info-title {
-        font-size: 13px;
-        color: #666;
-        margin-bottom: 5px;
-    }
-
-    .info-value {
-        font-weight: bold;
-    }
-
-    .delivery {
-        color: #16823a;
-    }
-
-    .total {
-        margin-top: 20px;
-        padding-top: 18px;
-        border-top: 2px solid #16823a;
-        font-size: 24px;
-        font-weight: bold;
-        color: #16823a;
-    }
-
-    .view-button {
-        display: inline-block;
-        margin-top: 18px;
-        background: #16823a;
-        color: white;
-        text-decoration: none;
-        padding: 11px 20px;
-        border-radius: 8px;
-        font-weight: bold;
-    }
-
-    .view-button:hover {
-        background: #0e642c;
-    }
-
-    .empty {
-        background: white;
-        padding: 60px 20px;
-        text-align: center;
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    }
-
-    .empty h2 {
-        color: #555;
-    }
-
-    .shop-button {
-        display: inline-block;
-        margin-top: 15px;
-        background: #16823a;
-        color: white;
-        text-decoration: none;
-        padding: 12px 24px;
-        border-radius: 8px;
-        font-weight: bold;
-    }
-
-    .flash {
-        background: #e8f5e9;
-        color: #176b2d;
-        padding: 14px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        font-weight: bold;
-    }
-
-    @media (max-width: 700px) {
-
-        .order-info {
-            grid-template-columns: 1fr;
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
         }
 
         nav {
+            display: flex;
+            flex-wrap: wrap;
             gap: 15px;
         }
 
-        .nav-links {
-            width: 100%;
-            justify-content: center;
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
         }
 
         .container {
             width: 95%;
+            max-width: 1000px;
+            margin: 25px auto;
         }
-    }
-</style>
-```
+
+        h1 {
+            text-align: center;
+            color: #198754;
+            margin-bottom: 25px;
+        }
+
+        .message {
+            background: #d1e7dd;
+            color: #0f5132;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .order {
+            background: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.10);
+        }
+
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .order-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #198754;
+        }
+
+        .date {
+            margin-top: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: #fff3cd;
+            color: #664d03;
+            font-weight: bold;
+        }
+
+        .status-packed {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .status-out {
+            background: #cff4fc;
+            color: #055160;
+        }
+
+        .status-delivered {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .info {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .progress-title {
+            margin-top: 25px;
+            color: #198754;
+        }
+
+        .progress {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+            margin: 25px 0;
+        }
+
+        .step {
+            width: 25%;
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+        }
+
+        .circle {
+            width: 32px;
+            height: 32px;
+            margin: 0 auto 8px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .step.active {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .step.active .circle {
+            background: #198754;
+            color: white;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 7px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .blue {
+            background: #0d6efd;
+        }
+
+        .green {
+            background: #198754;
+        }
+
+        .red {
+            background: #dc3545;
+        }
+
+        .purple {
+            background: #6f42c1;
+        }
+
+        .fingerprint {
+            margin-top: 20px;
+            padding: 18px;
+            border: 2px dashed #6f42c1;
+            border-radius: 10px;
+            background: #faf7ff;
+        }
+
+        .fingerprint h3 {
+            margin-top: 0;
+            color: #6f42c1;
+        }
+
+        #fingerprint-result {
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .empty {
+            background: white;
+            padding: 45px 25px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty h2 {
+            color: #198754;
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            nav {
+                justify-content: center;
+                gap: 10px;
+            }
+
+            nav a {
+                font-size: 14px;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .progress {
+                overflow-x: auto;
+            }
+
+            .step {
+                min-width: 90px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .button {
+                text-align: center;
+            }
+        }
+    </style>
 
 </head>
 
 <body>
 
-<nav>
 
-```
-<a
-    href="{{ url_for('home') }}"
-    class="logo"
->
-    🌱 AgroQuick
-</a>
+<header>
 
-<div class="nav-links">
+    <div class="logo">
+        🌾 AgroQuick
+    </div>
 
-    <a href="{{ url_for('home') }}">
-        Home
-    </a>
+    <nav>
 
-    <a href="{{ url_for('products') }}">
-        Products
-    </a>
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
 
-    <a href="{{ url_for('cart') }}" class="cart">
-        🛒 Cart
-    </a>
+        <a href="{{ url_for('products') }}">
+            Products
+        </a>
 
-    <a href="{{ url_for('orders') }}">
-        Orders
-    </a>
+        <a href="{{ url_for('cart') }}">
+            Cart
+        </a>
 
-    <a href="{{ url_for('logout') }}">
-        Logout
-    </a>
+        <a href="{{ url_for('orders') }}">
+            Orders
+        </a>
 
-</div>
-```
+        <a href="{{ url_for('profile') }}">
+            Profile
+        </a>
 
-</nav>
+        <a href="{{ url_for('logout') }}">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
 
 <div class="container">
 
-```
-<h1>📦 My Orders</h1>
+    <h1>
+        📦 My Orders
+    </h1>
 
 
-{% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages() %}
 
-    {% if messages %}
+        {% if messages %}
 
-        {% for message in messages %}
+            {% for message in messages %}
 
-            <div class="flash">
-                {{ message }}
+                <div class="message">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    {% if orders %}
+
+
+        {% for order in orders %}
+
+
+            <div class="order">
+
+
+                <div class="order-top">
+
+                    <div>
+
+                        <div class="order-number">
+                            Order #{{ order['id'] }}
+                        </div>
+
+                        <div class="date">
+                            {{ order['created_at'] }}
+                        </div>
+
+                    </div>
+
+
+                    {% if order['status'] == 'Delivered' %}
+
+                        <div class="status status-delivered">
+                            ✓ Delivered
+                        </div>
+
+                    {% elif order['status'] == 'Out for Delivery' %}
+
+                        <div class="status status-out">
+                            🚚 Out for Delivery
+                        </div>
+
+                    {% elif order['status'] == 'Packed' %}
+
+                        <div class="status status-packed">
+                            📦 Packed
+                        </div>
+
+                    {% else %}
+
+                        <div class="status">
+                            🛒 Order Placed
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>Name:</strong>
+
+                    {{ order['customer_name'] }}
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>Phone:</strong>
+
+                    {{ order['phone'] or 'Not provided' }}
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>Address:</strong>
+
+                    {{ order['address'] }}
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>Total:</strong>
+
+                    ₹{{ order['total'] }}
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>Delivery:</strong>
+
+                    {{ order['delivery_time'] or '20-30 minutes' }}
+
+                </div>
+
+
+                <h3 class="progress-title">
+                    Delivery Status
+                </h3>
+
+
+                <div class="progress">
+
+
+                    <div class="step active">
+
+                        <div class="circle">
+                            ✓
+                        </div>
+
+                        Order Placed
+
+                    </div>
+
+
+                    <div class="step
+                    {% if order['status'] == 'Packed' or order['status'] == 'Out for Delivery' or order['status'] == 'Delivered' %}
+                        active
+                    {% endif %}
+                    ">
+
+                        <div class="circle">
+                            2
+                        </div>
+
+                        Packed
+
+                    </div>
+
+
+                    <div class="step
+                    {% if order['status'] == 'Out for Delivery' or order['status'] == 'Delivered' %}
+                        active
+                    {% endif %}
+                    ">
+
+                        <div class="circle">
+                            3
+                        </div>
+
+                        Out for Delivery
+
+                    </div>
+
+
+                    <div class="step
+                    {% if order['status'] == 'Delivered' %}
+                        active
+                    {% endif %}
+                    ">
+
+                        <div class="circle">
+                            4
+                        </div>
+
+                        Delivered
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="buttons">
+
+
+                    <a
+                        href="{{ url_for('order_detail', order_id=order['id']) }}"
+                        class="button blue"
+                    >
+                        👁 View Order
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('delivery') }}"
+                        class="button green"
+                    >
+                        🚚 Delivery
+                    </a>
+
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('delete_order', order_id=order['id']) }}"
+                        onsubmit="return confirm('Delete this order?');"
+                        style="margin:0;"
+                    >
+
+                        <button
+                            type="submit"
+                            class="button red"
+                        >
+                            🗑 Delete
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+
+                {% if order['status'] == 'Out for Delivery' %}
+
+
+                    <div class="fingerprint">
+
+                        <h3>
+                            🔐 Fingerprint Verification
+                        </h3>
+
+                        <p>
+                            Verify fingerprint to confirm delivery.
+                        </p>
+
+
+                        <button
+                            type="button"
+                            class="button purple"
+                            onclick="verifyFingerprint()"
+                        >
+                            👆 Verify Fingerprint
+                        </button>
+
+
+                        <p id="fingerprint-result"></p>
+
+                    </div>
+
+
+                {% endif %}
+
+
             </div>
+
 
         {% endfor %}
 
-    {% endif %}
 
-{% endwith %}
-
-
-{% if orders %}
-
-    <div class="welcome">
-
-        <strong>
-            Hello {{ current_user_name or 'Farmer' }} 👋
-        </strong>
-
-        <br>
-
-        <span>
-            You have {{ orders|length }} order{% if orders|length != 1 %}s{% endif %}.
-        </span>
-
-    </div>
+    {% else %}
 
 
-    {% for order in orders %}
+        <div class="empty">
 
-        <div class="order-card">
+            <h2>
+                No Orders Yet
+            </h2>
 
-            <div class="order-header">
-
-                <div class="order-id">
-                    Order #{{ order['id'] }}
-                </div>
-
-                <div class="status">
-                    {{ order['status'] or 'Order Placed' }}
-                </div>
-
-            </div>
-
-
-            <div class="order-info">
-
-                <div class="info-box">
-
-                    <div class="info-title">
-                        Customer
-                    </div>
-
-                    <div class="info-value">
-                        {{ order['customer_name'] }}
-                    </div>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <div class="info-title">
-                        Mobile Number
-                    </div>
-
-                    <div class="info-value">
-
-                        {% if order['phone'] %}
-                            {{ order['phone'] }}
-                        {% else %}
-                            Not provided
-                        {% endif %}
-
-                    </div>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <div class="info-title">
-                        Delivery Address
-                    </div>
-
-                    <div class="info-value">
-                        {{ order['address'] }}
-                    </div>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <div class="info-title">
-                        Delivery Time
-                    </div>
-
-                    <div class="info-value delivery">
-                        🚚 {{ order['delivery_time'] or '20-30 minutes' }}
-                    </div>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <div class="info-title">
-                        Order Date
-                    </div>
-
-                    <div class="info-value">
-                        {{ order['created_at'] }}
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="total">
-                Total: ₹{{ "%.2f"|format(order['total']|float) }}
-            </div>
-
+            <p>
+                You have not placed any orders.
+            </p>
 
             <a
-                href="{{ url_for('order_detail', order_id=order['id']) }}"
-                class="view-button"
+                href="{{ url_for('products') }}"
+                class="button green"
             >
-                View Order Details
+                🛒 Start Shopping
             </a>
 
         </div>
 
-    {% endfor %}
 
+    {% endif %}
 
-{% else %}
-
-    <div class="empty">
-
-        <h2>
-            📦 No Orders Yet
-        </h2>
-
-        <p>
-            You haven't placed any orders yet.
-        </p>
-
-        <a
-            href="{{ url_for('products') }}"
-            class="shop-button"
-        >
-            Start Shopping
-        </a>
-
-    </div>
-
-{% endif %}
-```
 
 </div>
 
+
+<script>
+
+function verifyFingerprint() {
+
+    var result =
+        document.getElementById("fingerprint-result");
+
+    if (!result) {
+        return;
+    }
+
+    result.innerHTML =
+        "🔍 Scanning fingerprint...";
+
+
+    setTimeout(function() {
+
+        result.innerHTML =
+            "✅ Fingerprint verified successfully!";
+
+    }, 1500);
+
+}
+
+</script>
+
+
 </body>
+
 </html>
+```

@@ -1,0 +1,51 @@
+@app.route(
+    "/order/<int:order_id>"
+)
+@location_required
+def order_detail(order_id):
+
+    db = get_db()
+
+    order = db.execute(
+        """
+        SELECT *
+        FROM orders
+        WHERE id=?
+        AND user_id=?
+        """,
+        (
+            order_id,
+            session["user_id"]
+        )
+    ).fetchone()
+
+    if not order:
+
+        db.close()
+
+        flash(
+            "Order not found.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("orders")
+        )
+
+    order_items = db.execute(
+        """
+        SELECT *
+        FROM order_items
+        WHERE order_id=?
+        ORDER BY id
+        """,
+        (order_id,)
+    ).fetchall()
+
+    db.close()
+
+    return render_template(
+        "order_detail.html",
+        order=order,
+        order_items=order_items
+    )
