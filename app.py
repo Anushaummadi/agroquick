@@ -12,11 +12,11 @@ from functools import wraps
 # ============================================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_DIR = os.path.dirname(BASE_DIR)
+PROJECT_DIR = BASE_DIR
 
-TEMPLATES_DIR = os.path.join(PROJECT_DIR, "templates")
-STATIC_DIR = os.path.join(PROJECT_DIR, "static")
-DATABASE = os.path.join(PROJECT_DIR, "agroquick.db")
+TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+DATABASE = os.path.join(BASE_DIR, "agroquick.db")
 
 # ============================================================
 # FLASK APP
@@ -1778,3 +1778,4 @@ if __name__ == "__main__":
         port=int(os.environ.get("PORT", 5000)),
         debug=True
     )
+
