@@ -1,167 +1,352 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AgroQuick - Farming Tools</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AgroQuick - Tools</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            background: #f4f8f2;
+            font-family: Arial, sans-serif;
+            background: #f5f7f5;
+            color: #222;
         }
 
-        header {
-            background: #2e7d32;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .products {
+        nav {
+            background: #16823a;
+            padding: 16px 30px;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 30px;
-        }
-
-        .product {
-            background: white;
-            width: 220px;
-            padding: 20px;
-            text-align: center;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px #cccccc;
-        }
-
-        .emoji-image {
-            font-size: 80px;
-            height: 130px;
-            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .product h2 {
-            color: #2e7d32;
-        }
-
-        .product button {
-            background: #2e7d32;
+        .logo {
             color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .cart-button {
-            display: block;
-            width: fit-content;
-            margin: 20px auto;
-            background: #ff9800;
-            color: white;
-            padding: 12px 20px;
             text-decoration: none;
-            border-radius: 6px;
+            font-size: 26px;
+            font-weight: bold;
         }
 
-        .back-button {
-            display: block;
-            width: fit-content;
-            margin: 20px auto;
-            color: #2e7d32;
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
             text-decoration: none;
             font-weight: bold;
         }
 
-        form {
-            margin: 0;
+        .cart-button {
+            background: white;
+            color: #16823a !important;
+            padding: 9px 16px;
+            border-radius: 20px;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1250px;
+            margin: 35px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #16823a;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .flash {
+            padding: 14px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: #e8f5e9;
+            color: #176b2d;
+            font-weight: bold;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 190px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #f1f1f1;
+        }
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 14px 0 7px;
+        }
+
+        .category {
+            color: #16823a;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .description {
+            color: #666;
+            min-height: 42px;
+            margin-top: 8px;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+
+        .delivery {
+            color: #16823a;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .cart-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .quantity {
+            width: 65px;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+        }
+
+        .add-button {
+            flex: 1;
+            border: none;
+            background: #16823a;
+            color: white;
+            padding: 11px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .add-button:hover {
+            background: #0e642c;
+        }
+
+        .details-button {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #16823a;
+            color: #16823a;
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 50px;
+            font-size: 20px;
         }
     </style>
 </head>
 
 <body>
 
-<header>
-    <h1>🛠️ AgroQuick Farming Tools</h1>
-    <p>Useful Tools for Everyday Farming</p>
-</header>
+<nav>
 
-<a href="/cart" class="cart-button">🛒 View Cart</a>
+    <a href="{{ url_for('home') }}" class="logo">
+        AgroQuick
+    </a>
 
-<div class="products">
+    <div class="nav-links">
 
-    <!-- Hand Hoe -->
-    <div class="product">
-        <div class="emoji-image">🔨</div>
+        <a href="{{ url_for('home') }}">Home</a>
 
-        <h2>Hand Hoe</h2>
-        <p>Useful for soil preparation.</p>
+        <a href="{{ url_for('products') }}">Products</a>
 
-        <h3>₹450</h3>
+        <a href="{{ url_for('seeds') }}">Seeds</a>
 
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="product" value="Hand Hoe">
-            <input type="hidden" name="price" value="450">
-            <button type="submit">Add to Cart</button>
-        </form>
+        <a href="{{ url_for('fertilizer') }}">Fertilizer</a>
+
+        <a href="{{ url_for('tools') }}">Tools</a>
+
+        <a href="{{ url_for('equipment') }}">Equipment</a>
+
+        <a href="{{ url_for('cart') }}" class="cart-button">
+            Cart ({{ cart_count }})
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <h1>Farming Tools</h1>
+
+    <div class="subtitle">
+        Tools for everyday farming and agricultural work
     </div>
 
 
-    <!-- Pruning Shears -->
-    <div class="product">
-        <div class="emoji-image">✂️</div>
+    {% with messages = get_flashed_messages() %}
 
-        <h2>Pruning Shears</h2>
-        <p>Useful for trimming plants.</p>
+        {% if messages %}
 
-        <h3>₹350</h3>
+            {% for message in messages %}
 
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="product" value="Pruning Shears">
-            <input type="hidden" name="price" value="350">
-            <button type="submit">Add to Cart</button>
-        </form>
-    </div>
+                <div class="flash">
+                    {{ message }}
+                </div>
 
+            {% endfor %}
 
-    <!-- Watering Can -->
-    <div class="product">
-        <div class="emoji-image">🪣</div>
+        {% endif %}
 
-        <h2>Watering Can</h2>
-        <p>Useful for watering plants.</p>
-
-        <h3>₹250</h3>
-
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="product" value="Watering Can">
-            <input type="hidden" name="price" value="250">
-            <button type="submit">Add to Cart</button>
-        </form>
-    </div>
+    {% endwith %}
 
 
-    <!-- Hand Cultivator -->
-    <div class="product">
-        <div class="emoji-image">🌱</div>
+    {% if products %}
 
-        <h2>Hand Cultivator</h2>
-        <p>Useful for loosening soil.</p>
+        <div class="product-grid">
 
-        <h3>₹300</h3>
+            {% for product in products %}
 
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="product" value="Hand Cultivator">
-            <input type="hidden" name="price" value="300">
-            <button type="submit">Add to Cart</button>
-        </form>
-    </div>
+                <div class="product-card">
+
+                    {% if product['image'] %}
+
+                        <img
+                            src="{{ url_for('static', filename='images/' + product['image']) }}"
+                            class="product-image"
+                            alt="{{ product['name'] }}"
+                        >
+
+                    {% endif %}
+
+
+                    <div class="product-name">
+                        {{ product['name'] }}
+                    </div>
+
+
+                    <div class="category">
+                        Tools
+                    </div>
+
+
+                    <div class="description">
+                        {{ product['description'] or 'Quality farming tool for agricultural use.' }}
+                    </div>
+
+
+                    <div class="price">
+                        ₹{{ "%.2f"|format(product['price']) }}
+                    </div>
+
+
+                    <div class="delivery">
+                        Delivery: {{ product['delivery_time'] or '20-30 minutes' }}
+                    </div>
+
+
+                    {% if product['stock'] > 0 %}
+
+                        <form
+                            action="{{ url_for('add_to_cart_post') }}"
+                            method="POST"
+                            class="cart-form"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="product_id"
+                                value="{{ product['id'] }}"
+                            >
+
+                            <input
+                                type="number"
+                                name="quantity"
+                                value="1"
+                                min="1"
+                                max="{{ product['stock'] }}"
+                                class="quantity"
+                            >
+
+                            <button type="submit" class="add-button">
+                                Add to Cart
+                            </button>
+
+                        </form>
+
+                    {% else %}
+
+                        <button class="add-button" disabled>
+                            Out of Stock
+                        </button>
+
+                    {% endif %}
+
+
+                    <a
+                        href="{{ url_for('product', product_id=product['id']) }}"
+                        class="details-button"
+                    >
+                        View Details
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty">
+            No farming tools available.
+        </div>
+
+    {% endif %}
 
 </div>
-
-<a href="/home" class="back-button">🏠 Back to Home</a>
 
 </body>
 </html>

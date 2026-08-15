@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ product['name'] }} - AgroQuick</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+            margin: 0;
+
+            background: #f4f8f2;
+
+            color: #222;
+        }
+
+
+        /* ==================================================
+           HEADER
+        ================================================== */
+
+        header {
+            background: #198754;
+
+            color: white;
+
+            padding: 18px 6%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 15px;
+        }
+
+
+        .logo {
+            font-size: 28px;
+
+            font-weight: bold;
+        }
+
+
+        .logo span {
+            color: #ffd166;
+        }
+
+
+        .nav-links {
+            display: flex;
+
+            gap: 10px;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+        }
+
+
+        .nav-links a {
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            padding: 8px 12px;
+
+            border-radius: 7px;
+        }
+
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+
+        .cart-nav {
+            background: #ffd166;
+
+            color: #222 !important;
+        }
+
+
+        /* ==================================================
+           MAIN CONTAINER
+        ================================================== */
+
+        .container {
+            max-width: 1000px;
+
+            margin: 40px auto;
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 4px 18px rgba(0,0,0,0.10);
+        }
+
+
+        .product-layout {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 40px;
+
+            align-items: start;
+        }
+
+
+        /* ==================================================
+           IMAGE
+        ================================================== */
+
+        .image-section {
+            text-align: center;
+        }
+
+
+        .product-image {
+            width: 100%;
+
+            max-width: 450px;
+
+            height: 380px;
+
+            object-fit: contain;
+
+            display: block;
+
+            margin: auto;
+
+            background: #f5f8f4;
+
+            border-radius: 12px;
+        }
+
+
+        /* ==================================================
+           PRODUCT INFORMATION
+        ================================================== */
+
+        .product-info {
+            padding: 10px;
+        }
+
+
+        .category {
+            display: inline-block;
+
+            background: #e8f5e9;
+
+            color: #198754;
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            margin-bottom: 12px;
+        }
+
+
+        h1 {
+            color: #198754;
+
+            font-size: 34px;
+
+            margin: 8px 0 15px;
+        }
+
+
+        .price {
+            font-size: 30px;
+
+            font-weight: bold;
+
+            color: #e65100;
+
+            margin: 15px 0;
+        }
+
+
+        .description-box {
+            background: #f1f8e9;
+
+            padding: 18px;
+
+            border-radius: 10px;
+
+            margin-top: 20px;
+        }
+
+
+        .description-box h3 {
+            margin-top: 0;
+
+            color: #2e7d32;
+        }
+
+
+        .description-box p {
+            line-height: 1.6;
+
+            color: #555;
+        }
+
+
+        /* ==================================================
+           STOCK
+        ================================================== */
+
+        .stock {
+            margin-top: 18px;
+
+            font-weight: bold;
+        }
+
+
+        .in-stock {
+            color: #198754;
+        }
+
+
+        .out-stock {
+            color: #d32f2f;
+        }
+
+
+        /* ==================================================
+           DELIVERY
+        ================================================== */
+
+        .delivery {
+            background: #e8f5e9;
+
+            color: #2e7d32;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+            margin-top: 18px;
+        }
+
+
+        /* ==================================================
+           QUANTITY
+        ================================================== */
+
+        .quantity-section {
+            margin-top: 22px;
+        }
+
+
+        .quantity-section label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+
+        .quantity-input {
+            width: 100px;
+
+            padding: 11px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 7px;
+
+            font-size: 16px;
+        }
+
+
+        /* ==================================================
+           BUTTONS
+        ================================================== */
+
+        .buttons {
+            margin-top: 20px;
+
+            display: flex;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .button {
+            display: inline-block;
+
+            padding: 13px 22px;
+
+            border-radius: 7px;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            border: none;
+
+            cursor: pointer;
+
+            font-size: 15px;
+        }
+
+
+        .cart {
+            background: #198754;
+        }
+
+
+        .cart:hover {
+            background: #146c43;
+        }
+
+
+        .back {
+            background: #757575;
+        }
+
+
+        .back:hover {
+            background: #616161;
+        }
+
+
+        /* ==================================================
+           MOBILE
+        ================================================== */
+
+        @media (max-width: 700px) {
+
+            header {
+                justify-content: center;
+
+                text-align: center;
+            }
+
+
+            .product-layout {
+                grid-template-columns: 1fr;
+
+                gap: 20px;
+            }
+
+
+            .container {
+                margin: 20px 12px;
+
+                padding: 20px;
+            }
+
+
+            .product-image {
+                height: 280px;
+            }
+
+
+            h1 {
+                font-size: 28px;
+            }
+
+
+            .price {
+                font-size: 26px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
+<header>
+
+
+    <div class="logo">
+
+        Agro<span>Quick</span>
+
+    </div>
+
+
+    <div class="nav-links">
+
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+
+        <a href="{{ url_for('products') }}">
+            Products
+        </a>
+
+
+        <a href="{{ url_for('orders') }}">
+            Orders
+        </a>
+
+
+        <a
+            href="{{ url_for('cart') }}"
+            class="cart-nav"
+        >
+            🛒 Cart
+            {% if cart_count > 0 %}
+                ({{ cart_count }})
+            {% endif %}
+        </a>
+
+
+    </div>
+
+
+</header>
+
+
+
+<!-- ==================================================
+     PRODUCT
+================================================== -->
+
+<div class="container">
+
+
+    <div class="product-layout">
+
+
+        <!-- IMAGE -->
+
+        <div class="image-section">
+
+
+            <img
+                class="product-image"
+
+                src="{{ url_for(
+                    'static',
+                    filename='images/' + product['image']
+                ) }}"
+
+                alt="{{ product['name'] }}"
+            >
+
+
+        </div>
+
+
+
+        <!-- INFORMATION -->
+
+        <div class="product-info">
+
+
+            <div class="category">
+
+                {{ product['category'] }}
+
+            </div>
+
+
+            <h1>
+
+                {{ product['name'] }}
+
+            </h1>
+
+
+            <div class="price">
+
+                ₹{{ "%.2f"|format(product['price']) }}
+
+            </div>
+
+
+
+            <!-- DELIVERY -->
+
+            <div class="delivery">
+
+                🚚 Fast delivery:
+
+                <strong>
+                    {{ product['delivery_time'] or '20-30 minutes' }}
+                </strong>
+
+            </div>
+
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="description-box">
+
+
+                <h3>
+                    Product Description
+                </h3>
+
+
+                <p>
+
+                    {{ product['description'] }}
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- STOCK -->
+
+            <div class="stock">
+
+
+                {% if product['stock'] > 0 %}
+
+                    <span class="in-stock">
+
+                        ✅ In Stock
+
+                    </span>
+
+                    <br>
+
+                    <small>
+                        {{ product['stock'] }} available
+                    </small>
+
+                {% else %}
+
+                    <span class="out-stock">
+
+                        ❌ Out of Stock
+
+                    </span>
+
+                {% endif %}
+
+
+            </div>
+
+
+
+            {% if product['stock'] > 0 %}
+
+
+            <!-- ADD TO CART FORM -->
+
+            <form
+                method="POST"
+                action="{{ url_for('add_to_cart_post') }}"
+            >
+
+
+                <input
+                    type="hidden"
+                    name="product_id"
+                    value="{{ product['id'] }}"
+                >
+
+
+                <div class="quantity-section">
+
+
+                    <label for="quantity">
+                        Quantity
+                    </label>
+
+
+                    <input
+                        class="quantity-input"
+
+                        type="number"
+
+                        id="quantity"
+
+                        name="quantity"
+
+                        value="1"
+
+                        min="1"
+
+                        max="{{ product['stock'] }}"
+                    >
+
+
+                </div>
+
+
+
+                <div class="buttons">
+
+
+                    <button
+                        type="submit"
+                        class="button cart"
+                    >
+                        🛒 Add to Cart
+                    </button>
+
+
+                    <a
+                        href="{{ url_for('products') }}"
+                        class="button back"
+                    >
+                        ← Back to Products
+                    </a>
+
+
+                </div>
+
+
+            </form>
+
+
+            {% else %}
+
+
+            <div class="buttons">
+
+
+                <a
+                    href="{{ url_for('products') }}"
+                    class="button back"
+                >
+                    ← Back to Products
+                </a>
+
+
+            </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

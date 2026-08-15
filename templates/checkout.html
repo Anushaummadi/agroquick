@@ -1,45 +1,405 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
 <head>
-    <title>AgroQuick - Checkout</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>AgroQuick - Checkout</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f7f4;
+        color: #222;
+    }
+
+    nav {
+        background: #16823a;
+        padding: 16px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        color: white;
+        text-decoration: none;
+        font-size: 26px;
+        font-weight: bold;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .container {
+        width: 92%;
+        max-width: 1100px;
+        margin: 35px auto;
+    }
+
+    h1 {
+        text-align: center;
+        color: #16823a;
+        margin-bottom: 30px;
+    }
+
+    .checkout-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
+
+    .box {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .box h2 {
+        margin-top: 0;
+        color: #16823a;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-top: 15px;
+        margin-bottom: 7px;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .product {
+        display: flex;
+        gap: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid #ddd;
+        align-items: center;
+    }
+
+    .product:last-child {
+        border-bottom: none;
+    }
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border-radius: 10px;
+        background: #f1f1f1;
+    }
+
+    .product-info {
+        flex: 1;
+    }
+
+    .product-name {
+        font-weight: bold;
+        font-size: 17px;
+    }
+
+    .product-price {
+        color: #16823a;
+        margin-top: 5px;
+    }
+
+    .delivery {
+        color: #16823a;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    .total {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid #16823a;
+        font-size: 25px;
+        font-weight: bold;
+        color: #16823a;
+    }
+
+    .place-order {
+        width: 100%;
+        margin-top: 20px;
+        padding: 15px;
+        border: none;
+        border-radius: 9px;
+        background: #16823a;
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .place-order:hover {
+        background: #0e642c;
+    }
+
+    .back {
+        display: inline-block;
+        margin-top: 20px;
+        color: #16823a;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .flash {
+        padding: 14px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        background: #fff3cd;
+        color: #856404;
+        font-weight: bold;
+    }
+
+    .success-info {
+        background: #e8f5e9;
+        padding: 15px;
+        border-radius: 10px;
+        color: #176b2d;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    @media (max-width: 750px) {
+        .checkout-grid {
+            grid-template-columns: 1fr;
+        }
+
+        nav {
+            gap: 15px;
+        }
+
+        .nav-links {
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    }
+</style>
+```
+
 </head>
 
 <body>
 
-    <h1>🧾 AgroQuick Checkout</h1>
-
-    <h2>Delivery Details</h2>
-
-    <form method="POST" action="/place-order">
-
-        <label>Full Name:</label>
-        <input type="text" name="name" placeholder="Enter your name" required>
-
-        <br><br>
-
-        <label>Mobile Number:</label>
-        <input type="tel" name="mobile" placeholder="Enter mobile number" required>
-
-        <br><br>
-
-        <label>Delivery Address:</label>
-        <br>
-        <textarea name="address" rows="4" cols="40"
-                  placeholder="Enter delivery address" required></textarea>
-
-        <br><br>
-
-        <h2>Order Total: ₹{{ total }}</h2>
-
-        <button type="submit">Place Order</button>
-
-    </form>
-
-    <br>
-
-    <a href="/cart">
-        <button>Back to Cart</button>
+<nav>
+    <a href="{{ url_for('home') }}" class="logo">
+        🌱 AgroQuick
     </a>
+
+```
+<div class="nav-links">
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('products') }}">Products</a>
+    <a href="{{ url_for('cart') }}">🛒 Cart</a>
+    <a href="{{ url_for('orders') }}">Orders</a>
+</div>
+```
+
+</nav>
+
+<div class="container">
+
+```
+<h1>🧾 Checkout</h1>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="flash">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="checkout-grid">
+
+    <!-- DELIVERY DETAILS -->
+    <div class="box">
+
+        <h2>📍 Delivery Details</h2>
+
+        <div class="success-info">
+            🚚 AgroQuick delivery available in
+            <strong>20-30 minutes</strong>
+        </div>
+
+        <form method="POST" action="{{ url_for('checkout') }}">
+
+            <label for="customer_name">
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="customer_name"
+                name="customer_name"
+                value="{{ user['name'] if user else '' }}"
+                placeholder="Enter your full name"
+                required
+            >
+
+            <label for="phone">
+                Mobile Number
+            </label>
+
+            <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value="{{ user['phone'] if user else '' }}"
+                placeholder="Enter your 10-digit mobile number"
+                maxlength="10"
+                pattern="[0-9]{10}"
+                required
+            >
+
+            <label for="address">
+                Delivery Address
+            </label>
+
+            <textarea
+                id="address"
+                name="address"
+                placeholder="Enter your complete delivery address"
+                required
+            >{{ user['address'] if user else '' }}</textarea>
+
+            <label>
+                Delivery Location
+            </label>
+
+            <input
+                type="text"
+                value="{{ user_location or '' }}"
+                readonly
+            >
+
+            <button
+                type="submit"
+                class="place-order"
+            >
+                🛍️ Place Order
+            </button>
+
+        </form>
+
+        <a
+            href="{{ url_for('cart') }}"
+            class="back"
+        >
+            ← Back to Cart
+        </a>
+
+    </div>
+
+
+    <!-- ORDER SUMMARY -->
+    <div class="box">
+
+        <h2>🛒 Order Summary</h2>
+
+        {% if items %}
+
+            {% for item in items %}
+
+                <div class="product">
+
+                    {% if item['image'] %}
+
+                        <img
+                            src="{{ url_for('static', filename='images/' + item['image']) }}"
+                            class="product-image"
+                            alt="{{ item['name'] }}"
+                            onerror="this.style.display='none';"
+                        >
+
+                    {% endif %}
+
+                    <div class="product-info">
+
+                        <div class="product-name">
+                            {{ item['name'] }}
+                        </div>
+
+                        <div>
+                            Quantity:
+                            <strong>{{ item['quantity'] }}</strong>
+                        </div>
+
+                        <div class="product-price">
+                            ₹{{ "%.2f"|format(item['price']) }}
+                        </div>
+
+                        <div class="delivery">
+                            🚚 20-30 minutes
+                        </div>
+
+                    </div>
+
+                    <strong>
+                        ₹{{ "%.2f"|format(item['subtotal']) }}
+                    </strong>
+
+                </div>
+
+            {% endfor %}
+
+            <div class="total">
+                Total: ₹{{ "%.2f"|format(total) }}
+            </div>
+
+        {% else %}
+
+            <p>
+                Your cart is empty.
+            </p>
+
+            <a href="{{ url_for('products') }}">
+                Browse Products
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</div>
+```
+
+</div>
 
 </body>
 </html>

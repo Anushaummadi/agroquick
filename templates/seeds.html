@@ -1,206 +1,289 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>AgroQuick - Seeds</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroQuick - Seeds</title>
 
-<style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f5f7f5;
-    }
+    <style>
+        * { box-sizing: border-box; }
 
-    header {
-        background: #198754;
-        color: white;
-        padding: 18px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f5;
+        }
 
-    header h1 {
-        margin: 0;
-    }
+        nav {
+            background: #16823a;
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-    nav a {
-        color: white;
-        text-decoration: none;
-        margin-left: 18px;
-    }
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 26px;
+            font-weight: bold;
+        }
 
-    .container {
-        max-width: 1100px;
-        margin: auto;
-        padding: 30px;
-    }
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
 
-    h2 {
-        text-align: center;
-        color: #198754;
-        margin-bottom: 30px;
-    }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-    .products {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 25px;
-    }
+        .cart {
+            background: white;
+            color: #16823a !important;
+            padding: 9px 15px;
+            border-radius: 20px;
+        }
 
-    .card {
-        background: white;
-        padding: 20px;
-        text-align: center;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    }
+        .container {
+            width: 92%;
+            max-width: 1250px;
+            margin: 35px auto;
+        }
 
-    .seed-image {
-        width: 180px;
-        height: 140px;
-        margin: 0 auto 15px;
-        background: #e8f5e9;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 65px;
-    }
+        h1 {
+            text-align: center;
+            color: #16823a;
+            margin-bottom: 30px;
+        }
 
-    .card h3 {
-        color: #198754;
-    }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+        }
 
-    .price {
-        font-size: 18px;
-        font-weight: bold;
-    }
+        .card {
+            background: white;
+            padding: 18px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
 
-    button {
-        background: #198754;
-        color: white;
-        border: none;
-        padding: 11px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-    }
+        .image {
+            width: 100%;
+            height: 190px;
+            object-fit: contain;
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
 
-    button:hover {
-        background: #146c43;
-    }
-</style>
+        .name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 14px;
+        }
 
-</head><body><header>
-    <h1>🌾 AgroQuick</h1><nav>
-    <a href="/">Home</a>
-    <a href="/cart">🛒 Cart</a>
-    <a href="/orders">Orders</a>
+        .category {
+            color: #16823a;
+            font-weight: bold;
+            margin-top: 6px;
+        }
+
+        .unit {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 6px 10px;
+            background: #e8f5e9;
+            color: #16823a;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .description {
+            color: #666;
+            min-height: 42px;
+            margin-top: 8px;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .delivery {
+            color: #16823a;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        form {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        input {
+            width: 65px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+        }
+
+        button {
+            flex: 1;
+            background: #16823a;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .details {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #16823a;
+            color: #16823a;
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <a href="{{ url_for('home') }}" class="logo">🌱 AgroQuick</a>
+
+    <div class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('products') }}">Products</a>
+        <a href="{{ url_for('tools') }}">Tools</a>
+        <a href="{{ url_for('equipment') }}">Equipment</a>
+        <a href="{{ url_for('cart') }}" class="cart">🛒 Cart</a>
+    </div>
 </nav>
 
-</header><div class="container"><h2>🌱 Seeds</h2>
+<div class="container">
 
-<div class="products">
+    <h1>🌱 Seeds</h1>
 
-    <!-- Rice Seeds -->
-    <div class="card">
+    {% if products %}
 
-        <div class="seed-image">
-            🌾🌱
+        <div class="grid">
+
+            {% for product in products %}
+
+                <div class="card">
+
+                    {% if product['image'] %}
+                        <img
+                            src="{{ url_for('static', filename='images/' ~ product['image']) }}"
+                            class="image"
+                            alt="{{ product['name'] }}"
+                            onerror="this.style.display='none';"
+                        >
+                    {% endif %}
+
+                    <div class="name">
+                        {{ product['name'] }}
+                    </div>
+
+                    <div class="category">
+                        {{ product['category'] }}
+                    </div>
+
+                    <div class="unit">
+                        📦 {{ product['unit'] or '1 piece' }}
+                    </div>
+
+                    <div class="description">
+                        {{ product['description'] or 'Quality seeds for farming.' }}
+                    </div>
+
+                    <div class="price">
+                        ₹{{ "%.2f"|format(product['price']|float) }}
+                    </div>
+
+                    <div class="delivery">
+                        🚚 {{ product['delivery_time'] or '20-30 minutes' }}
+                    </div>
+
+                    {% if product['stock']|int > 0 %}
+
+                        <form
+                            action="{{ url_for('add_to_cart_post') }}"
+                            method="POST"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="product_id"
+                                value="{{ product['id'] }}"
+                            >
+
+                            <input
+                                type="number"
+                                name="quantity"
+                                value="1"
+                                min="1"
+                                max="{{ product['stock'] }}"
+                            >
+
+                            <button type="submit">
+                                🛒 Add to Cart
+                            </button>
+
+                        </form>
+
+                    {% else %}
+
+                        <button disabled>
+                            Out of Stock
+                        </button>
+
+                    {% endif %}
+
+                    <a
+                        href="{{ url_for('product', product_id=product['id']) }}"
+                        class="details"
+                    >
+                        View Details
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
         </div>
 
-        <h3>Rice Seeds</h3>
+    {% else %}
 
-        <p>Quality rice seeds for farming.</p>
-
-        <p class="price">₹100</p>
-
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="product" value="Rice Seeds">
-            <input type="hidden" name="price" value="100">
-
-            <button type="submit">
-                Add to Cart
-            </button>
-        </form>
-
-    </div>
-
-
-    <!-- Wheat Seeds -->
-    <div class="card">
-
-        <div class="seed-image">
-            🌾🌿
+        <div class="empty">
+            <h2>No seeds available</h2>
+            <p>Please check again later.</p>
         </div>
 
-        <h3>Wheat Seeds</h3>
-
-        <p>Good quality wheat seeds.</p>
-
-        <p class="price">₹120</p>
-
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="product" value="Wheat Seeds">
-            <input type="hidden" name="price" value="120">
-
-            <button type="submit">
-                Add to Cart
-            </button>
-        </form>
-
-    </div>
-
-
-    <!-- Maize Seeds -->
-    <div class="card">
-
-        <div class="seed-image">
-            🌽🌱
-        </div>
-
-        <h3>Maize Seeds</h3>
-
-        <p>Quality maize seeds for farmers.</p>
-
-        <p class="price">₹150</p>
-
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="product" value="Maize Seeds">
-            <input type="hidden" name="price" value="150">
-
-            <button type="submit">
-                Add to Cart
-            </button>
-        </form>
-
-    </div>
-
-
-    <!-- Vegetable Seeds -->
-    <div class="card">
-
-        <div class="seed-image">
-            🥕🥬🌱
-        </div>
-
-        <h3>Vegetable Seeds</h3>
-
-        <p>Fresh vegetable seeds.</p>
-
-        <p class="price">₹80</p>
-
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="product" value="Vegetable Seeds">
-            <input type="hidden" name="price" value="80">
-
-            <button type="submit">
-                Add to Cart
-            </button>
-        </form>
-
-    </div>
+    {% endif %}
 
 </div>
 
-</div></body>
+</body>
 </html>

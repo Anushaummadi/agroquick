@@ -1,1006 +1,1780 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import (
+    Flask, render_template, request, redirect,
+    url_for, session, flash, jsonify
+)
+import sqlite3
 import os
+from datetime import datetime
+from functools import wraps
 
-app = Flask(__name__)
+# ============================================================
+# PATHS
+# ============================================================
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(BASE_DIR)
+
+TEMPLATES_DIR = os.path.join(PROJECT_DIR, "templates")
+STATIC_DIR = os.path.join(PROJECT_DIR, "static")
+DATABASE = os.path.join(PROJECT_DIR, "agroquick.db")
+
+# ============================================================
+# FLASK APP
+# ============================================================
+
+app = Flask(
+    __name__,
+    template_folder=TEMPLATES_DIR,
+    static_folder=STATIC_DIR
+)
+
 app.secret_key = "agroquick123"
 
+# ============================================================
+# DATABASE
+# ============================================================
 
-# =========================================================
-# LARGE FARMING PRODUCT CATALOGUE
-# =========================================================
-
-PRODUCTS = [
-
-    # =========================
-    # FARM TOOLS
-    # =========================
-
-    {
-        "id": "gaddapara",
-        "name": "Gaddapara",
-        "category": "Tools",
-        "price": 450,
-        "image": "/static/images/gaddapara.jpg",
-        "description": "Traditional heavy-duty agricultural digging and soil-working tool.",
-        "uses": "Used for digging hard soil, breaking compact soil and preparing land.",
-        "specifications": "Heavy-duty agricultural hand tool.",
-        "stock": "In Stock",
-        "keywords": ["gaddapara", "gaddapara tool", "digging tool", "గడ్డపార", "गडापारा"]
-    },
-
-    {
-        "id": "spade",
-        "name": "Agricultural Spade",
-        "category": "Tools",
-        "price": 550,
-        "image": "/static/images/spade.jpg",
-        "description": "Strong agricultural spade suitable for digging and turning soil.",
-        "uses": "Digging, soil preparation, transplanting and garden work.",
-        "specifications": "Metal agricultural spade with strong handle.",
-        "stock": "In Stock",
-        "keywords": ["spade", "agricultural spade", "digging spade", "పార", "फावड़ा"]
-    },
-
-    {
-        "id": "shovel",
-        "name": "Agricultural Shovel",
-        "category": "Tools",
-        "price": 500,
-        "image": "/static/images/shovel.jpg",
-        "description": "Agricultural shovel designed for moving soil, compost and other farm materials.",
-        "uses": "Moving soil, manure, compost and loose materials.",
-        "specifications": "Durable metal shovel.",
-        "stock": "In Stock",
-        "keywords": ["shovel", "soil shovel", "farm shovel", "పార", "फावड़ा"]
-    },
-
-    {
-        "id": "sickle",
-        "name": "Agricultural Sickle",
-        "category": "Tools",
-        "price": 300,
-        "image": "/static/images/sickle.jpg",
-        "description": "Traditional agricultural cutting tool for harvesting and vegetation management.",
-        "uses": "Harvesting crops and cutting grass and vegetation.",
-        "specifications": "Curved agricultural cutting blade.",
-        "stock": "In Stock",
-        "keywords": ["sickle", "harvesting sickle", "crop cutting", "కొడవలి", "दरांती"]
-    },
-
-    {
-        "id": "hoe",
-        "name": "Hand Hoe",
-        "category": "Tools",
-        "price": 400,
-        "image": "/static/images/hoe.jpg",
-        "description": "Hand hoe for soil preparation and removal of weeds.",
-        "uses": "Loosening soil, weeding and preparing planting areas.",
-        "specifications": "Agricultural hand hoe.",
-        "stock": "In Stock",
-        "keywords": ["hoe", "hand hoe", "weeding hoe", "గొడ్డలి", "कुदाल"]
-    },
-
-    {
-        "id": "pickaxe",
-        "name": "Agricultural Pickaxe",
-        "category": "Tools",
-        "price": 650,
-        "image": "/static/images/pickaxe.jpg",
-        "description": "Heavy-duty pickaxe for breaking hard soil and preparing land.",
-        "uses": "Breaking hard soil and digging compact ground.",
-        "specifications": "Heavy agricultural pickaxe.",
-        "stock": "In Stock",
-        "keywords": ["pickaxe", "pick axe", "digging", "గొడ్డలి", "कुदाल"]
-    },
-
-    {
-        "id": "rake",
-        "name": "Agricultural Rake",
-        "category": "Tools",
-        "price": 450,
-        "image": "/static/images/rake.jpg",
-        "description": "Farm rake for collecting leaves, crop residue and leveling soil.",
-        "uses": "Soil leveling, collecting leaves and cleaning farm areas.",
-        "specifications": "Agricultural metal rake.",
-        "stock": "In Stock",
-        "keywords": ["rake", "farm rake", "soil rake", "రేక్"]
-    },
-
-    {
-        "id": "pruning-shears",
-        "name": "Pruning Shears",
-        "category": "Tools",
-        "price": 350,
-        "image": "/static/images/pruning-shears.jpg",
-        "description": "Hand pruning tool for cutting small branches and plant growth.",
-        "uses": "Pruning plants, branches and garden crops.",
-        "specifications": "Hand-operated pruning shears.",
-        "stock": "In Stock",
-        "keywords": ["pruning shears", "secateur", "pruner", "branch cutter"]
-    },
-
-    {
-        "id": "hand-weeder",
-        "name": "Hand Weeder",
-        "category": "Tools",
-        "price": 250,
-        "image": "/static/images/hand-weeder.jpg",
-        "description": "Hand tool designed for removing weeds around crops.",
-        "uses": "Manual weed removal and soil loosening.",
-        "specifications": "Compact agricultural hand weeder.",
-        "stock": "In Stock",
-        "keywords": ["weeder", "hand weeder", "weed remover", "కలుపు"]
-    },
+def get_db():
+    db = sqlite3.connect(DATABASE)
+    db.row_factory = sqlite3.Row
+    return db
 
 
-    # =========================
-    # SEEDS
-    # =========================
+def ensure_column(db, table, column, definition):
+    columns = [
+        row["name"]
+        for row in db.execute(
+            f"PRAGMA table_info({table})"
+        ).fetchall()
+    ]
 
-    {
-        "id": "rice-seeds",
-        "name": "Rice Seeds",
-        "category": "Seeds",
-        "price": 100,
-        "image": "/static/images/rice-seeds.jpg",
-        "description": "Quality rice seed suitable for agricultural cultivation.",
-        "uses": "Rice and paddy cultivation.",
-        "specifications": "Seed suitable for agricultural sowing.",
-        "stock": "In Stock",
-        "keywords": ["rice", "rice seeds", "paddy", "paddy seeds", "వరి", "వరి విత్తనాలు", "धान"]
-    },
-
-    {
-        "id": "wheat-seeds",
-        "name": "Wheat Seeds",
-        "category": "Seeds",
-        "price": 120,
-        "image": "/static/images/wheat-seeds.jpg",
-        "description": "Agricultural wheat seeds for crop cultivation.",
-        "uses": "Wheat cultivation.",
-        "specifications": "Wheat seed for agricultural sowing.",
-        "stock": "In Stock",
-        "keywords": ["wheat", "wheat seeds", "గోధుమ", "గోధుమ విత్తనాలు", "गेहूं"]
-    },
-
-    {
-        "id": "maize-seeds",
-        "name": "Maize Seeds",
-        "category": "Seeds",
-        "price": 150,
-        "image": "/static/images/maize-seeds.jpg",
-        "description": "Maize seed for agricultural crop production.",
-        "uses": "Maize and corn cultivation.",
-        "specifications": "Maize seed for sowing.",
-        "stock": "In Stock",
-        "keywords": ["maize", "corn", "maize seeds", "మొక్కజొన్న", "मक्का"]
-    },
-
-    {
-        "id": "cotton-seeds",
-        "name": "Cotton Seeds",
-        "category": "Seeds",
-        "price": 650,
-        "image": "/static/images/cotton-seeds.jpg",
-        "description": "Cotton seed for agricultural cultivation.",
-        "uses": "Cotton farming.",
-        "specifications": "Agricultural cotton seed.",
-        "stock": "In Stock",
-        "keywords": ["cotton", "cotton seeds", "పత్తి", "पत्ता"]
-    },
-
-    {
-        "id": "groundnut-seeds",
-        "name": "Groundnut Seeds",
-        "category": "Seeds",
-        "price": 180,
-        "image": "/static/images/groundnut-seeds.jpg",
-        "description": "Groundnut seed suitable for crop cultivation.",
-        "uses": "Groundnut farming.",
-        "specifications": "Agricultural groundnut seed.",
-        "stock": "In Stock",
-        "keywords": ["groundnut", "peanut", "groundnut seeds", "వేరుశెనగ"]
-    },
-
-    {
-        "id": "chilli-seeds",
-        "name": "Chilli Seeds",
-        "category": "Seeds",
-        "price": 220,
-        "image": "/static/images/chilli-seeds.jpg",
-        "description": "Chilli seeds for agricultural and vegetable cultivation.",
-        "uses": "Chilli cultivation.",
-        "specifications": "Vegetable crop seed.",
-        "stock": "In Stock",
-        "keywords": ["chilli", "chili", "chilli seeds", "మిరప", "మిరప విత్తనాలు"]
-    },
-
-    {
-        "id": "tomato-seeds",
-        "name": "Tomato Seeds",
-        "category": "Seeds",
-        "price": 180,
-        "image": "/static/images/tomato-seeds.jpg",
-        "description": "Tomato seeds suitable for vegetable cultivation.",
-        "uses": "Tomato farming.",
-        "specifications": "Vegetable crop seed.",
-        "stock": "In Stock",
-        "keywords": ["tomato", "tomato seeds", "టమాటా", "टमाटर"]
-    },
-
-    {
-        "id": "vegetable-seeds",
-        "name": "Vegetable Seeds",
-        "category": "Seeds",
-        "price": 80,
-        "image": "/static/images/vegetable-seeds.jpg",
-        "description": "Vegetable seed collection for home gardens and farming.",
-        "uses": "Vegetable cultivation.",
-        "specifications": "Mixed vegetable seed category.",
-        "stock": "In Stock",
-        "keywords": ["vegetable", "vegetables", "vegetable seeds", "కూరగాయలు"]
-    },
+    if column not in columns:
+        db.execute(
+            f"ALTER TABLE {table} ADD COLUMN {column} {definition}"
+        )
 
 
-    # =========================
-    # FERTILIZERS
-    # =========================
+def init_db():
+    db = get_db()
 
-    {
-        "id": "urea",
-        "name": "Urea Fertilizer",
-        "category": "Fertilizer",
-        "price": 500,
-        "image": "/static/images/urea.jpg",
-        "description": "Nitrogen fertilizer used as a nutrient source in crop production.",
-        "uses": "Nitrogen nutrition for crops.",
-        "specifications": "Agricultural fertilizer product.",
-        "stock": "In Stock",
-        "keywords": ["urea", "urea fertilizer", "యూరియా", "यूरिया"]
-    },
+    # USERS
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            phone TEXT,
+            password TEXT NOT NULL,
+            address TEXT,
+            location TEXT,
+            created_at TEXT
+        )
+    """)
 
-    {
-        "id": "dap",
-        "name": "DAP Fertilizer",
-        "category": "Fertilizer",
-        "price": 1350,
-        "image": "/static/images/dap.jpg",
-        "description": "Di-ammonium phosphate fertilizer used as a source of nitrogen and phosphorus.",
-        "uses": "Crop nutrient management.",
-        "specifications": "DAP fertilizer.",
-        "stock": "In Stock",
-        "keywords": ["dap", "dap fertilizer", "di ammonium phosphate", "డిఎపి"]
-    },
+    ensure_column(db, "users", "phone", "TEXT")
+    ensure_column(db, "users", "address", "TEXT")
+    ensure_column(db, "users", "location", "TEXT")
+    ensure_column(db, "users", "created_at", "TEXT")
 
-    {
-        "id": "npk",
-        "name": "NPK Fertilizer",
-        "category": "Fertilizer",
-        "price": 900,
-        "image": "/static/images/npk.jpg",
-        "description": "Compound fertilizer providing nitrogen, phosphorus and potassium nutrients.",
-        "uses": "Crop nutrient management.",
-        "specifications": "NPK compound fertilizer.",
-        "stock": "In Stock",
-        "keywords": ["npk", "npk fertilizer", "ఎన్ పి కె"]
-    },
+    # CATEGORIES
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT UNIQUE NOT NULL
+        )
+    """)
 
-    {
-        "id": "potash",
-        "name": "Potash Fertilizer",
-        "category": "Fertilizer",
-        "price": 800,
-        "image": "/static/images/potash.jpg",
-        "description": "Potassium fertilizer used in crop nutrient management.",
-        "uses": "Potassium nutrition for crops.",
-        "specifications": "Agricultural potash fertilizer.",
-        "stock": "In Stock",
-        "keywords": ["potash", "potassium fertilizer", "పొటాష్"]
-    },
+    categories = [
+        "Seeds",
+        "Fertilizer",
+        "Tools",
+        "Equipment",
+        "Cropcare",
+        "Irrigation",
+        "Pesticides",
+        "Organic Farming",
+        "Nursery",
+        "Animal Farming"
+    ]
 
-    {
-        "id": "vermicompost",
-        "name": "Vermicompost",
-        "category": "Organic Farming",
-        "price": 300,
-        "image": "/static/images/vermicompost.jpg",
-        "description": "Organic manure produced through earthworm-based composting.",
-        "uses": "Organic soil improvement and nutrient management.",
-        "specifications": "Organic manure.",
-        "stock": "In Stock",
-        "keywords": ["vermicompost", "organic manure", "compost", "వర్మీకంపోస్ట్"]
-    },
+    for name in categories:
+        db.execute(
+            "INSERT OR IGNORE INTO categories(name) VALUES(?)",
+            (name,)
+        )
 
+    # PRODUCTS
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS products (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            category_id INTEGER NOT NULL,
+            price REAL NOT NULL,
+            image TEXT,
+            description TEXT,
+            stock INTEGER DEFAULT 100,
+            delivery_time TEXT DEFAULT '20-30 minutes',
+            created_at TEXT
+        )
+    """)
 
-    # =========================
-    # IRRIGATION
-    # =========================
+    ensure_column(db, "products", "stock", "INTEGER DEFAULT 100")
+    ensure_column(
+        db, "products",
+        "delivery_time",
+        "TEXT DEFAULT '20-30 minutes'"
+    )
+    ensure_column(db, "products", "created_at", "TEXT")
 
-    {
-        "id": "water-pump",
-        "name": "Water Pump",
-        "category": "Irrigation",
-        "price": 2500,
-        "image": "/static/images/water-pump.jpg",
-        "description": "Agricultural water pump for irrigation and water transfer.",
-        "uses": "Farm irrigation and water transfer.",
-        "specifications": "Agricultural irrigation equipment.",
-        "stock": "In Stock",
-        "keywords": ["water pump", "pump", "irrigation pump", "నీటి పంపు", "मोटर"]
-    },
+    # ========================================================
+    # CART ITEMS - PERMANENT CART FOR EACH LOGGED-IN USER
+    # ========================================================
 
-    {
-        "id": "drip-irrigation-kit",
-        "name": "Drip Irrigation Kit",
-        "category": "Irrigation",
-        "price": 1800,
-        "image": "/static/images/drip-kit.jpg",
-        "description": "Drip irrigation components for controlled water delivery to crops.",
-        "uses": "Efficient crop irrigation.",
-        "specifications": "Drip irrigation kit.",
-        "stock": "In Stock",
-        "keywords": ["drip", "drip irrigation", "drip kit", "డ్రిప్"]
-    },
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS cart_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            product_id INTEGER NOT NULL,
+            quantity INTEGER NOT NULL DEFAULT 1,
+            UNIQUE(user_id, product_id)
+        )
+    """)
 
-    {
-        "id": "sprinkler-set",
-        "name": "Agricultural Sprinkler Set",
-        "category": "Irrigation",
-        "price": 1200,
-        "image": "/static/images/sprinkler.jpg",
-        "description": "Sprinkler irrigation equipment for distributing water over crop areas.",
-        "uses": "Farm irrigation.",
-        "specifications": "Agricultural sprinkler set.",
-        "stock": "In Stock",
-        "keywords": ["sprinkler", "sprinkler set", "irrigation sprinkler", "స్ప్రింక్లర్"]
-    },
+    # ORDERS
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            customer_name TEXT,
+            phone TEXT,
+            address TEXT,
+            total REAL,
+            status TEXT,
+            delivery_time TEXT,
+            created_at TEXT
+        )
+    """)
 
-    {
-        "id": "irrigation-pipe",
-        "name": "Agricultural Irrigation Pipe",
-        "category": "Irrigation",
-        "price": 700,
-        "image": "/static/images/irrigation-pipe.jpg",
-        "description": "Pipe suitable for agricultural water transportation.",
-        "uses": "Moving irrigation water.",
-        "specifications": "Agricultural irrigation pipe.",
-        "stock": "In Stock",
-        "keywords": ["irrigation pipe", "farm pipe", "water pipe", "నీటి పైపు"]
-    },
+    ensure_column(db, "orders", "phone", "TEXT")
+    ensure_column(db, "orders", "address", "TEXT")
+    ensure_column(db, "orders", "status", "TEXT")
+    ensure_column(db, "orders", "delivery_time", "TEXT")
+    ensure_column(db, "orders", "created_at", "TEXT")
 
+    # ORDER ITEMS
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS order_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_id INTEGER,
+            product_id INTEGER,
+            product_name TEXT,
+            quantity INTEGER,
+            price REAL,
+            subtotal REAL
+        )
+    """)
 
-    # =========================
-    # FARM EQUIPMENT
-    # =========================
+    # ========================================================
+    # PRODUCTS
+    # ========================================================
 
-    {
-        "id": "seed-drill",
-        "name": "Seed Drill",
-        "category": "Farm Equipment",
-        "price": 8000,
-        "image": "/static/images/seed-drill.jpg",
-        "description": "Agricultural equipment designed for placing seeds in prepared soil.",
-        "uses": "Seed sowing and planting.",
-        "specifications": "Agricultural seed drilling equipment.",
-        "stock": "In Stock",
-        "keywords": ["seed drill", "sowing machine", "planting machine", "విత్తే యంత్రం"]
-    },
+    product_count = db.execute(
+        "SELECT COUNT(*) AS count FROM products"
+    ).fetchone()["count"]
 
-    {
-        "id": "mini-cultivator",
-        "name": "Mini Cultivator",
-        "category": "Farm Equipment",
-        "price": 12000,
-        "image": "/static/images/mini-cultivator.jpg",
-        "description": "Compact cultivation equipment for soil preparation.",
-        "uses": "Soil cultivation and preparation.",
-        "specifications": "Compact agricultural cultivator.",
-        "stock": "In Stock",
-        "keywords": ["cultivator", "mini cultivator", "soil cultivator", "సాగు యంత్రం"]
-    },
+    if product_count == 0:
+        product_data = [
+            # SEEDS
+            ("Tomato Seeds", "Seeds", 99, "tomato-seeds.jpg",
+             "Quality tomato seeds for farming."),
+            ("Chilli Seeds", "Seeds", 89, "chilli-seeds.jpg",
+             "Quality chilli seeds."),
+            ("Brinjal Seeds", "Seeds", 79, "brinjal-seeds.jpg",
+             "Healthy brinjal seeds."),
+            ("Okra Seeds", "Seeds", 85, "okra-seeds.jpg",
+             "Quality okra seeds."),
+            ("Maize Seeds", "Seeds", 199, "maize-seeds.jpg",
+             "High quality maize seeds."),
+            ("Paddy Seeds", "Seeds", 299, "paddy.png",
+             "Quality paddy seeds."),
+            ("Groundnut Seeds", "Seeds", 249, "groundnut-seeds.jpg",
+             "Quality groundnut seeds."),
+            ("Cotton Seeds", "Seeds", 399, "cotton-seeds.jpg",
+             "High quality cotton seeds."),
+            ("Sunflower Seeds", "Seeds", 199, "sunflower-seeds.jpg",
+             "Quality sunflower seeds."),
+            ("Wheat Seeds", "Seeds", 149, "wheat-seeds.jpg",
+             "Quality wheat seeds."),
 
-    {
-        "id": "sprayer",
-        "name": "Agricultural Sprayer",
-        "category": "Farm Equipment",
-        "price": 3500,
-        "image": "/static/images/sprayer.jpg",
-        "description": "Agricultural sprayer for applying approved crop-care products.",
-        "uses": "Crop spraying.",
-        "specifications": "Agricultural spraying equipment.",
-        "stock": "In Stock",
-        "keywords": ["sprayer", "farm sprayer", "crop sprayer", "స్ప్రేయర్"]
-    },
+            # FERTILIZER
+            ("Urea Fertilizer", "Fertilizer", 299, "urea.jpg",
+             "Nitrogen fertilizer for crops."),
+            ("DAP Fertilizer", "Fertilizer", 499, "dap.jpg",
+             "Nitrogen and phosphorus fertilizer."),
+            ("NPK Fertilizer", "Fertilizer", 599, "npk.jpg",
+             "Balanced NPK fertilizer."),
+            ("Potash Fertilizer", "Fertilizer", 449, "potash.jpg",
+             "Potassium fertilizer."),
+            ("Organic Fertilizer", "Fertilizer", 499,
+             "organic-fertilizer.jpg",
+             "Organic fertilizer for healthy crops."),
 
-    {
-        "id": "brush-cutter",
-        "name": "Brush Cutter",
-        "category": "Farm Equipment",
-        "price": 8500,
-        "image": "/static/images/brush-cutter.jpg",
-        "description": "Powered equipment for cutting grass and unwanted vegetation.",
-        "uses": "Vegetation and grass cutting.",
-        "specifications": "Agricultural brush-cutting equipment.",
-        "stock": "In Stock",
-        "keywords": ["brush cutter", "grass cutter", "vegetation cutter"]
-    },
+            # TOOLS
+            ("Hand Hoe", "Tools", 299, "hoe.jpg",
+             "Strong agricultural hand hoe."),
+            ("Garden Spade", "Tools", 399, "spade.jpg",
+             "Strong digging spade."),
+            ("Hand Cultivator", "Tools", 249, "cultivator.jpg",
+             "Soil loosening tool."),
+            ("Pruning Cutter", "Tools", 249, "pruner.jpg",
+             "Useful pruning cutter."),
+            ("Sickle", "Tools", 199, "sickle.jpg",
+             "Durable harvesting sickle."),
+            ("Weeding Tool", "Tools", 229, "weeder.jpg",
+             "Useful tool for removing weeds."),
 
+            # EQUIPMENT
+            ("Water Pump", "Equipment", 4999, "water-pump.jpg",
+             "Agricultural water pump."),
+            ("Agricultural Sprayer", "Equipment", 1299, "sprayer.jpg",
+             "Agricultural crop sprayer."),
+            ("Knapsack Sprayer", "Equipment", 1899,
+             "knapsack-sprayer.jpg",
+             "Backpack agricultural sprayer."),
 
-    # =========================
-    # CROP CARE
-    # =========================
+            # IRRIGATION
+            ("Drip Irrigation Kit", "Irrigation", 2499, "drip-kit.jpg",
+             "Efficient drip irrigation kit."),
+            ("Water Pipe", "Irrigation", 799, "water-pipe.jpg",
+             "Agricultural water pipe."),
+            ("Drip Emitters", "Irrigation", 499, "drip-emitter.jpg",
+             "Drip irrigation emitters."),
 
-    {
-        "id": "micronutrient-mix",
-        "name": "Micronutrient Mix",
-        "category": "Crop Care",
-        "price": 400,
-        "image": "/static/images/micronutrient.jpg",
-        "description": "Micronutrient product used as part of crop nutrient management.",
-        "uses": "Crop micronutrient management.",
-        "specifications": "Agricultural micronutrient product.",
-        "stock": "In Stock",
-        "keywords": ["micronutrient", "micro nutrient", "crop nutrition", "సూక్ష్మ పోషకాలు"]
-    },
+            # CROPCARE
+            ("Crop Care Kit", "Cropcare", 699, "crop-care-kit.jpg",
+             "Useful crop care products."),
+            ("Plant Growth Booster", "Cropcare", 399,
+             "plant-growth-booster.jpg",
+             "Plant growth booster."),
 
-    {
-        "id": "plant-growth-support",
-        "name": "Plant Growth Support",
-        "category": "Crop Care",
-        "price": 250,
-        "image": "/static/images/plant-growth.jpg",
-        "description": "Crop-care product intended to support plant growth when used according to its label.",
-        "uses": "Plant and crop-care management.",
-        "specifications": "Agricultural crop-care product.",
-        "stock": "In Stock",
-        "keywords": ["plant growth", "growth support", "crop care", "పంట సంరక్షణ"]
-    },
+            # ORGANIC
+            ("Organic Compost", "Organic Farming", 299, "organic-compost.jpg",
+             "Organic compost for farming."),
 
-    {
-        "id": "neem-crop-care",
-        "name": "Neem Based Crop Care",
-        "category": "Crop Care",
-        "price": 300,
-        "image": "/static/images/neem.jpg",
-        "description": "Neem-based agricultural crop-care product.",
-        "uses": "Crop-care management according to product directions.",
-        "specifications": "Neem-based agricultural product.",
-        "stock": "In Stock",
-        "keywords": ["neem", "neem crop care", "organic crop care", "వేప"]
-    },
+            # NURSERY
+            ("Tomato Plant", "Nursery", 49, "tomato-plant.jpg",
+             "Healthy tomato plant."),
+            ("Mango Sapling", "Nursery", 149, "mango-sapling.jpg",
+             "Healthy mango sapling."),
+            ("Guava Sapling", "Nursery", 129, "guava-sapling.jpg",
+             "Healthy guava sapling.")
+        ]
 
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # =========================
-    # NURSERY & GARDEN
-    # =========================
+        for name, category, price, image, description in product_data:
+            category_row = db.execute(
+                """
+                SELECT id FROM categories
+                WHERE LOWER(name)=LOWER(?)
+                """,
+                (category,)
+            ).fetchone()
 
-    {
-        "id": "seed-tray",
-        "name": "Seedling Nursery Tray",
-        "category": "Nursery",
-        "price": 120,
-        "image": "/static/images/seed-tray.jpg",
-        "description": "Reusable tray for raising seedlings.",
-        "uses": "Nursery and seedling production.",
-        "specifications": "Multi-cell nursery tray.",
-        "stock": "In Stock",
-        "keywords": ["seed tray", "nursery tray", "seedling tray", "నర్సరీ ట్రే"]
-    },
+            if category_row:
+                db.execute(
+                    """
+                    INSERT INTO products
+                    (
+                        name, category_id, price, image,
+                        description, stock, delivery_time, created_at
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        name,
+                        category_row["id"],
+                        price,
+                        image,
+                        description,
+                        100,
+                        "20-30 minutes",
+                        now
+                    )
+                )
 
-    {
-        "id": "grow-bag",
-        "name": "Plant Grow Bag",
-        "category": "Nursery",
-        "price": 100,
-        "image": "/static/images/grow-bag.jpg",
-        "description": "Grow bag suitable for container-based crop and plant cultivation.",
-        "uses": "Vegetable, nursery and home farming.",
-        "specifications": "Reusable plant grow bag.",
-        "stock": "In Stock",
-        "keywords": ["grow bag", "plant bag", "nursery bag", "గ్రో బ్యాగ్"]
-    },
+    db.commit()
+    db.close()
 
-    {
-        "id": "plant-support",
-        "name": "Plant Support Sticks",
-        "category": "Nursery",
-        "price": 150,
-        "image": "/static/images/plant-support.jpg",
-        "description": "Supports for plants that need physical growth support.",
-        "uses": "Supporting vegetable and garden plants.",
-        "specifications": "Agricultural plant-support accessories.",
-        "stock": "In Stock",
-        "keywords": ["plant support", "support sticks", "plant stake"]
-    },
+# ============================================================
+# AUTH
+# ============================================================
+
+def login_required(function):
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        if "user_id" not in session:
+            flash("Please login first.", "warning")
+            return redirect(url_for("login"))
+        return function(*args, **kwargs)
+    return wrapper
 
 
-    # =========================
-    # HARVEST & STORAGE
-    # =========================
+def location_required(function):
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        if "user_id" not in session:
+            return redirect(url_for("login"))
 
-    {
-        "id": "harvest-knife",
-        "name": "Harvesting Knife",
-        "category": "Harvesting",
-        "price": 280,
-        "image": "/static/images/harvest-knife.jpg",
-        "description": "Agricultural hand tool used for harvesting and cutting suitable crops.",
-        "uses": "Harvesting and crop cutting.",
-        "specifications": "Agricultural harvesting hand tool.",
-        "stock": "In Stock",
-        "keywords": ["harvesting knife", "harvest knife", "crop knife"]
-    },
+        if not session.get("user_location"):
+            return redirect(url_for("location"))
 
-    {
-        "id": "farm-crate",
-        "name": "Agricultural Plastic Crate",
-        "category": "Storage",
-        "price": 450,
-        "image": "/static/images/farm-crate.jpg",
-        "description": "Reusable crate for handling and transporting agricultural produce.",
-        "uses": "Produce handling and transportation.",
-        "specifications": "Reusable agricultural crate.",
-        "stock": "In Stock",
-        "keywords": ["farm crate", "plastic crate", "vegetable crate", "క్రేట్"]
-    },
+        return function(*args, **kwargs)
+    return wrapper
 
-    {
-        "id": "tarpaulin",
-        "name": "Agricultural Tarpaulin",
-        "category": "Storage",
-        "price": 900,
-        "image": "/static/images/tarpaulin.jpg",
-        "description": "Protective agricultural sheet used for covering and handling farm materials.",
-        "uses": "Crop covering, drying and material protection.",
-        "specifications": "Agricultural tarpaulin sheet.",
-        "stock": "In Stock",
-        "keywords": ["tarpaulin", "farm sheet", "crop cover", "టార్పాలిన్"]
+# ============================================================
+# CART - DATABASE BASED
+# ============================================================
+
+def get_cart():
+    """Return the logged-in user's cart as {product_id: quantity}."""
+    if "user_id" not in session:
+        return {}
+
+    db = get_db()
+
+    rows = db.execute(
+        """
+        SELECT product_id, quantity
+        FROM cart_items
+        WHERE user_id=?
+        """,
+        (session["user_id"],)
+    ).fetchall()
+
+    db.close()
+
+    cart = {}
+
+    for row in rows:
+        try:
+            product_id = str(int(row["product_id"]))
+            quantity = int(row["quantity"])
+
+            if quantity > 0:
+                cart[product_id] = quantity
+        except (ValueError, TypeError):
+            pass
+
+    return cart
+
+
+def cart_count():
+    """Number of products/units currently in the user's cart."""
+    if "user_id" not in session:
+        return 0
+
+    db = get_db()
+
+    row = db.execute(
+        """
+        SELECT COALESCE(SUM(quantity), 0) AS total
+        FROM cart_items
+        WHERE user_id=?
+        """,
+        (session["user_id"],)
+    ).fetchone()
+
+    db.close()
+
+    return int(row["total"] or 0)
+
+# ============================================================
+# TEMPLATE GLOBALS
+# ============================================================
+
+@app.context_processor
+def globals_for_templates():
+    return {
+        "cart_count": cart_count(),
+        "user_location": session.get("user_location"),
+        "current_user_name": session.get("user_name"),
+        "logged_in": "user_id" in session
     }
-]
 
-
-# =========================================================
+# ============================================================
 # HOME
-# =========================================================
+# ============================================================
 
 @app.route("/")
+def index():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    if not session.get("user_location"):
+        return redirect(url_for("location"))
+
+    return redirect(url_for("home"))
+
+
 @app.route("/home")
+@location_required
 def home():
-    return render_template("home.html")
+    db = get_db()
 
+    categories = db.execute(
+        """
+        SELECT id, name
+        FROM categories
+        ORDER BY id
+        """
+    ).fetchall()
 
-# =========================================================
-# ABOUT
-# =========================================================
+    products = db.execute(
+        """
+        SELECT
+            p.id,
+            p.name,
+            p.category_id,
+            c.name AS category,
+            p.price,
+            p.image,
+            p.description,
+            p.stock,
+            p.delivery_time,
+            p.created_at
+        FROM products p
+        LEFT JOIN categories c ON p.category_id=c.id
+        ORDER BY p.id DESC
+        LIMIT 12
+        """
+    ).fetchall()
+
+    db.close()
+
+    return render_template(
+        "home.html",
+        products=products,
+        categories=categories
+    )
+
+# ============================================================
+# LOGIN
+# ============================================================
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "").strip()
+
+        if not email or not password:
+            flash("Please enter email and password.", "danger")
+            return redirect(url_for("login"))
+
+        db = get_db()
+
+        user = db.execute(
+            """
+            SELECT *
+            FROM users
+            WHERE LOWER(email)=?
+            AND password=?
+            """,
+            (email, password)
+        ).fetchone()
+
+        db.close()
+
+        if user:
+            # Keep any session cart, then restore it.
+            old_session_cart = session.get("cart", {})
+
+            if not isinstance(old_session_cart, dict):
+                old_session_cart = {}
+
+            session.clear()
+
+            session["user_id"] = user["id"]
+            session["user_name"] = user["name"]
+            session["user_email"] = user["email"]
+            session["user_location"] = user["location"] or ""
+
+            # Compatibility with older session carts.
+            session["cart"] = old_session_cart
+
+            # If an old session cart exists, move it into DB.
+            if old_session_cart:
+                db = get_db()
+
+                for product_id, quantity in old_session_cart.items():
+                    try:
+                        pid = int(product_id)
+                        qty = int(quantity)
+
+                        if qty > 0:
+                            db.execute(
+                                """
+                                INSERT INTO cart_items
+                                (user_id, product_id, quantity)
+                                VALUES (?, ?, ?)
+                                ON CONFLICT(user_id, product_id)
+                                DO UPDATE SET quantity=quantity+excluded.quantity
+                                """,
+                                (
+                                    user["id"],
+                                    pid,
+                                    qty
+                                )
+                            )
+                    except (ValueError, TypeError):
+                        pass
+
+                db.commit()
+                db.close()
+
+                session["cart"] = {}
+                session.modified = True
+
+            if user["location"]:
+                return redirect(url_for("home"))
+
+            return redirect(url_for("location"))
+
+        flash("Invalid email or password.", "danger")
+
+    return render_template("login.html")
+
+# ============================================================
+# SIGNUP
+# ============================================================
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        phone = request.form.get("phone", "").strip()
+        password = request.form.get("password", "").strip()
+        address = request.form.get("address", "").strip()
+
+        if not name or not email or not password:
+            flash(
+                "Name, email and password are required.",
+                "danger"
+            )
+            return redirect(url_for("signup"))
+
+        db = get_db()
+
+        try:
+            db.execute(
+                """
+                INSERT INTO users
+                (
+                    name, email, phone, password,
+                    address, location, created_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    name,
+                    email,
+                    phone,
+                    password,
+                    address,
+                    "",
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                )
+            )
+
+            db.commit()
+
+        except sqlite3.IntegrityError:
+            db.close()
+            flash(
+                "Email already registered. Please login.",
+                "danger"
+            )
+            return redirect(url_for("login"))
+
+        db.close()
+
+        flash(
+            "Account created successfully. Please login.",
+            "success"
+        )
+
+        return redirect(url_for("login"))
+
+    return render_template("signup.html")
+
+# ============================================================
+# LOGOUT
+# ============================================================
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+# ============================================================
+# LOCATION
+# ============================================================
+
+@app.route("/location", methods=["GET", "POST"])
+@login_required
+def location():
+    if request.method == "POST":
+        user_location = request.form.get(
+            "location", ""
+        ).strip()
+
+        address = request.form.get(
+            "address", ""
+        ).strip()
+
+        if not user_location:
+            flash(
+                "Please enter your delivery location.",
+                "danger"
+            )
+            return redirect(url_for("location"))
+
+        db = get_db()
+
+        db.execute(
+            """
+            UPDATE users
+            SET location=?, address=?
+            WHERE id=?
+            """,
+            (
+                user_location,
+                address,
+                session["user_id"]
+            )
+        )
+
+        db.commit()
+        db.close()
+
+        session["user_location"] = user_location
+        session.modified = True
+
+        return redirect(url_for("home"))
+
+    return render_template("location.html")
+
+# ============================================================
+# BASIC PAGES
+# ============================================================
 
 @app.route("/about")
 def about():
     return render_template("about.html")
 
 
-# =========================================================
-# CONTACT
-# =========================================================
-
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
 
 
-# =========================================================
-# LOGIN
-# =========================================================
+@app.route("/delivery")
+def delivery():
+    return render_template("Delivery.html")
 
-@app.route("/login")
-def login():
-    return render_template("Login.html")
+# ============================================================
+# PRODUCT HELPERS
+# ============================================================
+
+def get_all_products():
+    db = get_db()
+
+    products = db.execute(
+        """
+        SELECT
+            p.id,
+            p.name,
+            p.category_id,
+            c.name AS category,
+            p.price,
+            p.image,
+            p.description,
+            p.stock,
+            p.delivery_time,
+            p.created_at
+        FROM products p
+        LEFT JOIN categories c ON p.category_id=c.id
+        ORDER BY p.name
+        """
+    ).fetchall()
+
+    db.close()
+    return products
 
 
-# =========================================================
-# SIGNUP
-# =========================================================
+def get_single_product(product_id):
+    db = get_db()
 
-@app.route("/signup")
-def signup():
-    return render_template("Signup.html")
+    product = db.execute(
+        """
+        SELECT
+            p.id,
+            p.name,
+            p.category_id,
+            c.name AS category,
+            p.price,
+            p.image,
+            p.description,
+            p.stock,
+            p.delivery_time,
+            p.created_at
+        FROM products p
+        LEFT JOIN categories c ON p.category_id=c.id
+        WHERE p.id=?
+        """,
+        (product_id,)
+    ).fetchone()
+
+    db.close()
+    return product
 
 
-# =========================================================
-# SEARCH
-# =========================================================
+def get_category_products(category_name):
+    db = get_db()
 
-@app.route("/search")
-def search():
+    products = db.execute(
+        """
+        SELECT
+            p.id,
+            p.name,
+            p.category_id,
+            c.name AS category,
+            p.price,
+            p.image,
+            p.description,
+            p.stock,
+            p.delivery_time,
+            p.created_at
+        FROM products p
+        LEFT JOIN categories c ON p.category_id=c.id
+        WHERE LOWER(c.name)=LOWER(?)
+        ORDER BY p.name
+        """,
+        (category_name,)
+    ).fetchall()
 
-    query = request.args.get("query", "").strip().lower()
+    db.close()
+    return products
 
-    if query:
+# ============================================================
+# PRODUCTS
+# ============================================================
 
-        results = []
+@app.route("/products")
+@location_required
+def products():
+    return render_template(
+        "products.html",
+        products=get_all_products()
+    )
 
-        for product in PRODUCTS:
 
-            searchable_text = " ".join(
-                [
-                    product["name"],
-                    product["category"],
-                    " ".join(product["keywords"])
-                ]
-            ).lower()
+@app.route("/product/<int:product_id>")
+@location_required
+def product(product_id):
+    product_data = get_single_product(product_id)
 
-            if query in searchable_text:
-                results.append(product)
-
-    else:
-        results = []
+    if not product_data:
+        flash("Product not found.", "danger")
+        return redirect(url_for("products"))
 
     return render_template(
-        "search.html",
-        query=query,
-        results=results
+        "productDetails.html",
+        product=product_data
     )
 
-
-# =========================================================
-# INDIVIDUAL PRODUCT PAGE
-# =========================================================
-
-@app.route("/product/<product_id>")
-def product_detail(product_id):
-
-    product = next(
-        (
-            product
-            for product in PRODUCTS
-            if product["id"] == product_id
-        ),
-        None
-    )
-
-    if product is None:
-        return "Product not found", 404
-
-    return render_template(
-        "product.html",
-        product=product
-    )
-
-
-# =========================================================
+# ============================================================
 # CATEGORY PAGES
-# =========================================================
+# ============================================================
 
 @app.route("/seeds")
+@location_required
 def seeds():
-
-    products = [
-        product for product in PRODUCTS
-        if product["category"] == "Seeds"
-    ]
-
     return render_template(
         "seeds.html",
-        products=products
+        products=get_category_products("Seeds")
     )
 
 
 @app.route("/fertilizer")
+@location_required
 def fertilizer():
-
-    products = [
-        product for product in PRODUCTS
-        if product["category"] == "Fertilizer"
-    ]
-
     return render_template(
         "Fertilizer.html",
-        products=products
-    )
-
-
-@app.route("/equipment")
-def equipment():
-
-    products = [
-        product for product in PRODUCTS
-        if product["category"] == "Farm Equipment"
-    ]
-
-    return render_template(
-        "equipment.html",
-        products=products
+        products=get_category_products("Fertilizer")
     )
 
 
 @app.route("/tools")
+@location_required
 def tools():
-
-    products = [
-        product for product in PRODUCTS
-        if product["category"] == "Tools"
-    ]
-
     return render_template(
         "tools.html",
-        products=products
+        products=get_category_products("Tools")
+    )
+
+
+@app.route("/equipment")
+@location_required
+def equipment():
+    return render_template(
+        "equipment.html",
+        products=get_category_products("Equipment")
     )
 
 
 @app.route("/crop-care")
+@location_required
 def crop_care():
-
-    products = [
-        product for product in PRODUCTS
-        if product["category"] == "Crop Care"
-    ]
-
     return render_template(
         "crop_care.html",
-        products=products
+        products=get_category_products("Cropcare")
     )
 
+# ============================================================
+# CATEGORY REDIRECT
+# ============================================================
 
-# =========================================================
-# CART
-# =========================================================
+@app.route("/category/<category_name>")
+@location_required
+def category(category_name):
+    name = category_name.lower().strip()
+
+    mapping = {
+        "seeds": "seeds",
+        "fertilizer": "fertilizer",
+        "fertilizers": "fertilizer",
+        "tools": "tools",
+        "equipment": "equipment",
+        "cropcare": "crop_care",
+        "crop-care": "crop_care",
+        "crop care": "crop_care",
+        "irrigation": "products",
+        "pesticides": "products",
+        "organic farming": "products",
+        "nursery": "products",
+        "animal farming": "products"
+    }
+
+    if name in mapping:
+        return redirect(url_for(mapping[name]))
+
+    return redirect(url_for("products"))
+
+# ============================================================
+# SEARCH
+# ============================================================
+
+@app.route("/search")
+@location_required
+def search():
+    query = request.args.get("q", "").strip()
+
+    db = get_db()
+
+    if query:
+        products_list = db.execute(
+            """
+            SELECT
+                p.id,
+                p.name,
+                p.category_id,
+                c.name AS category,
+                p.price,
+                p.image,
+                p.description,
+                p.stock,
+                p.delivery_time,
+                p.created_at
+            FROM products p
+            LEFT JOIN categories c ON p.category_id=c.id
+            WHERE p.name LIKE ?
+               OR c.name LIKE ?
+               OR p.description LIKE ?
+            ORDER BY p.name
+            """,
+            (
+                f"%{query}%",
+                f"%{query}%",
+                f"%{query}%"
+            )
+        ).fetchall()
+    else:
+        products_list = []
+
+    db.close()
+
+    return render_template(
+        "search.html",
+        products=products_list,
+        search_query=query
+    )
+
+# ============================================================
+# ADD TO CART
+# ============================================================
+
+def add_item(product_id, quantity=1):
+    if "user_id" not in session:
+        flash("Please login first.", "warning")
+        return redirect(url_for("login"))
+
+    if not product_id:
+        flash("Invalid product.", "danger")
+        return redirect(url_for("products"))
+
+    db = get_db()
+
+    product_data = db.execute(
+        """
+        SELECT *
+        FROM products
+        WHERE id=?
+        """,
+        (product_id,)
+    ).fetchone()
+
+    if not product_data:
+        db.close()
+        flash("Product not found.", "danger")
+        return redirect(url_for("products"))
+
+    stock = int(product_data["stock"] or 0)
+
+    if stock <= 0:
+        db.close()
+        flash("Product is out of stock.", "warning")
+        return redirect(url_for("products"))
+
+    try:
+        quantity = int(quantity)
+    except (ValueError, TypeError):
+        quantity = 1
+
+    if quantity < 1:
+        quantity = 1
+
+    existing = db.execute(
+        """
+        SELECT quantity
+        FROM cart_items
+        WHERE user_id=?
+        AND product_id=?
+        """,
+        (
+            session["user_id"],
+            product_id
+        )
+    ).fetchone()
+
+    if existing:
+        old_quantity = int(existing["quantity"])
+        new_quantity = old_quantity + quantity
+
+        if new_quantity > stock:
+            new_quantity = stock
+
+        db.execute(
+            """
+            UPDATE cart_items
+            SET quantity=?
+            WHERE user_id=?
+            AND product_id=?
+            """,
+            (
+                new_quantity,
+                session["user_id"],
+                product_id
+            )
+        )
+    else:
+        if quantity > stock:
+            quantity = stock
+
+        db.execute(
+            """
+            INSERT INTO cart_items
+            (
+                user_id,
+                product_id,
+                quantity
+            )
+            VALUES (?, ?, ?)
+            """,
+            (
+                session["user_id"],
+                product_id,
+                quantity
+            )
+        )
+
+    db.commit()
+    db.close()
+
+    flash(
+        product_data["name"] + " added to cart.",
+        "success"
+    )
+
+    return redirect(url_for("cart"))
+
+
+@app.route("/add-to-cart", methods=["POST"])
+@location_required
+def add_to_cart_post():
+    product_id = request.form.get(
+        "product_id",
+        type=int
+    )
+
+    quantity = request.form.get(
+        "quantity",
+        1,
+        type=int
+    )
+
+    return add_item(product_id, quantity)
+
+
+@app.route("/add-to-cart/<int:product_id>")
+@location_required
+def add_to_cart(product_id):
+    return add_item(product_id, 1)
+
+# ============================================================
+# CART PAGE
+# ============================================================
 
 @app.route("/cart")
+@location_required
 def cart():
+    user_id = session["user_id"]
 
-    cart_items = session.get("cart", [])
+    db = get_db()
 
+    rows = db.execute(
+        """
+        SELECT
+            p.id,
+            p.name,
+            p.price,
+            p.image,
+            p.stock,
+            p.delivery_time,
+            ci.quantity
+        FROM cart_items ci
+        JOIN products p ON ci.product_id=p.id
+        WHERE ci.user_id=?
+        ORDER BY ci.id DESC
+        """,
+        (user_id,)
+    ).fetchall()
+
+    items = []
     total = 0
 
-    for item in cart_items:
-        total += (
-            float(item["price"])
-            * int(item["quantity"])
-        )
+    for row in rows:
+        quantity = int(row["quantity"])
+        stock = int(row["stock"] or 0)
+
+        if stock <= 0:
+            db.execute(
+                """
+                DELETE FROM cart_items
+                WHERE user_id=? AND product_id=?
+                """,
+                (user_id, row["id"])
+            )
+            continue
+
+        if quantity > stock:
+            quantity = stock
+
+            db.execute(
+                """
+                UPDATE cart_items
+                SET quantity=?
+                WHERE user_id=? AND product_id=?
+                """,
+                (
+                    quantity,
+                    user_id,
+                    row["id"]
+                )
+            )
+
+        subtotal = float(row["price"]) * quantity
+        total += subtotal
+
+        items.append({
+            "id": row["id"],
+            "name": row["name"],
+            "price": row["price"],
+            "image": row["image"],
+            "quantity": quantity,
+            "subtotal": subtotal,
+            "delivery_time":
+                row["delivery_time"] or "20-30 minutes"
+        })
+
+    db.commit()
+    db.close()
 
     return render_template(
         "cart.html",
-        cart=cart_items,
+        items=items,
         total=total
     )
 
-
-# =========================================================
-# ADD TO CART
-# =========================================================
-
-@app.route("/add-to-cart", methods=["POST"])
-def add_to_cart():
-
-    product = request.form.get(
-        "product",
-        "Product"
-    )
-
-    price = request.form.get(
-        "price",
-        "0"
-    )
-
-    try:
-        price = float(price)
-    except (ValueError, TypeError):
-        price = 0
-
-    cart_items = session.get(
-        "cart",
-        []
-    )
-
-    found = False
-
-    for item in cart_items:
-
-        if item["product"] == product:
-
-            item["quantity"] += 1
-
-            found = True
-
-            break
-
-    if not found:
-
-        cart_items.append(
-            {
-                "product": product,
-                "price": price,
-                "quantity": 1
-            }
-        )
-
-    session["cart"] = cart_items
-
-    return redirect("/cart")
-
-
-# =========================================================
+# ============================================================
 # INCREASE
-# =========================================================
+# ============================================================
 
-@app.route("/increase/<int:index>")
-def increase(index):
+@app.route("/increase/<int:product_id>")
+@location_required
+def increase(product_id):
+    user_id = session["user_id"]
 
-    cart_items = session.get(
-        "cart",
-        []
-    )
+    db = get_db()
 
-    if 0 <= index < len(cart_items):
+    row = db.execute(
+        """
+        SELECT
+            ci.quantity,
+            p.stock
+        FROM cart_items ci
+        JOIN products p ON ci.product_id=p.id
+        WHERE ci.user_id=?
+        AND ci.product_id=?
+        """,
+        (
+            user_id,
+            product_id
+        )
+    ).fetchone()
 
-        cart_items[index]["quantity"] += 1
+    if row:
+        current = int(row["quantity"])
+        stock = int(row["stock"] or 0)
 
-    session["cart"] = cart_items
+        if current < stock:
+            db.execute(
+                """
+                UPDATE cart_items
+                SET quantity=quantity+1
+                WHERE user_id=? AND product_id=?
+                """,
+                (
+                    user_id,
+                    product_id
+                )
+            )
 
-    return redirect("/cart")
+    db.commit()
+    db.close()
 
+    return redirect(url_for("cart"))
 
-# =========================================================
+# ============================================================
 # DECREASE
-# =========================================================
+# ============================================================
 
-@app.route("/decrease/<int:index>")
-def decrease(index):
+@app.route("/decrease/<int:product_id>")
+@location_required
+def decrease(product_id):
+    user_id = session["user_id"]
 
-    cart_items = session.get(
-        "cart",
-        []
-    )
+    db = get_db()
 
-    if 0 <= index < len(cart_items):
+    row = db.execute(
+        """
+        SELECT quantity
+        FROM cart_items
+        WHERE user_id=? AND product_id=?
+        """,
+        (
+            user_id,
+            product_id
+        )
+    ).fetchone()
 
-        if cart_items[index]["quantity"] > 1:
+    if row:
+        quantity = int(row["quantity"])
 
-            cart_items[index]["quantity"] -= 1
-
+        if quantity > 1:
+            db.execute(
+                """
+                UPDATE cart_items
+                SET quantity=quantity-1
+                WHERE user_id=? AND product_id=?
+                """,
+                (
+                    user_id,
+                    product_id
+                )
+            )
         else:
+            db.execute(
+                """
+                DELETE FROM cart_items
+                WHERE user_id=? AND product_id=?
+                """,
+                (
+                    user_id,
+                    product_id
+                )
+            )
 
-            cart_items.pop(index)
+    db.commit()
+    db.close()
 
-    session["cart"] = cart_items
+    return redirect(url_for("cart"))
 
-    return redirect("/cart")
-
-
-# =========================================================
+# ============================================================
 # REMOVE
-# =========================================================
+# ============================================================
 
-@app.route("/remove-from-cart/<int:index>")
-def remove_from_cart(index):
+@app.route("/remove-from-cart/<int:product_id>")
+@location_required
+def remove_from_cart(product_id):
+    db = get_db()
 
-    cart_items = session.get(
-        "cart",
-        []
+    db.execute(
+        """
+        DELETE FROM cart_items
+        WHERE user_id=? AND product_id=?
+        """,
+        (
+            session["user_id"],
+            product_id
+        )
     )
 
-    if 0 <= index < len(cart_items):
+    db.commit()
+    db.close()
 
-        cart_items.pop(index)
+    flash("Product removed from cart.", "success")
 
-    session["cart"] = cart_items
+    return redirect(url_for("cart"))
 
-    return redirect("/cart")
-
-
-# =========================================================
+# ============================================================
 # CHECKOUT
-# =========================================================
+# ============================================================
 
-@app.route("/checkout")
+@app.route("/checkout", methods=["GET", "POST"])
+@location_required
 def checkout():
+    user_id = session["user_id"]
 
-    cart_items = session.get(
-        "cart",
-        []
-    )
+    db = get_db()
 
+    cart_rows = db.execute(
+        """
+        SELECT
+            p.*,
+            ci.quantity
+        FROM cart_items ci
+        JOIN products p ON ci.product_id=p.id
+        WHERE ci.user_id=?
+        """,
+        (user_id,)
+    ).fetchall()
+
+    items = []
     total = 0
 
-    for item in cart_items:
+    for product_data in cart_rows:
+        quantity = int(product_data["quantity"])
+        stock = int(product_data["stock"] or 0)
 
-        total += (
-            float(item["price"])
-            * int(item["quantity"])
+        if stock <= 0:
+            continue
+
+        if quantity > stock:
+            quantity = stock
+
+        subtotal = float(product_data["price"]) * quantity
+        total += subtotal
+
+        items.append(
+            (
+                product_data,
+                quantity,
+                subtotal
+            )
         )
+
+    user = db.execute(
+        """
+        SELECT *
+        FROM users
+        WHERE id=?
+        """,
+        (user_id,)
+    ).fetchone()
+
+    if not items:
+        db.close()
+
+        flash("Your cart is empty.", "warning")
+
+        return redirect(url_for("products"))
+
+    if request.method == "POST":
+        customer_name = request.form.get(
+            "customer_name",
+            request.form.get("name", "")
+        ).strip()
+
+        phone = request.form.get(
+            "phone",
+            request.form.get("mobile", "")
+        ).strip()
+
+        address = request.form.get(
+            "address", ""
+        ).strip()
+
+        if not customer_name and user:
+            customer_name = user["name"] or ""
+
+        if not phone and user:
+            phone = user["phone"] or ""
+
+        if not address and user:
+            address = user["address"] or ""
+
+        if not customer_name:
+            db.close()
+            flash("Please enter your name.", "danger")
+            return redirect(url_for("checkout"))
+
+        if not phone:
+            db.close()
+            flash("Please enter your mobile number.", "danger")
+            return redirect(url_for("checkout"))
+
+        if not address:
+            db.close()
+            flash("Please enter your delivery address.", "danger")
+            return redirect(url_for("checkout"))
+
+        # STOCK CHECK
+        for product_data, quantity, subtotal in items:
+            if int(product_data["stock"] or 0) < quantity:
+                db.close()
+
+                flash(
+                    "Insufficient stock for "
+                    + product_data["name"],
+                    "danger"
+                )
+
+                return redirect(url_for("cart"))
+
+        cursor = db.cursor()
+
+        # CREATE ORDER
+        cursor.execute(
+            """
+            INSERT INTO orders
+            (
+                user_id,
+                customer_name,
+                phone,
+                address,
+                total,
+                status,
+                delivery_time,
+                created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                user_id,
+                customer_name,
+                phone,
+                address,
+                total,
+                "Order Placed",
+                "20-30 minutes",
+                datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                )
+            )
+        )
+
+        order_id = cursor.lastrowid
+
+        # ORDER ITEMS + STOCK
+        for product_data, quantity, subtotal in items:
+            cursor.execute(
+                """
+                INSERT INTO order_items
+                (
+                    order_id,
+                    product_id,
+                    product_name,
+                    quantity,
+                    price,
+                    subtotal
+                )
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    order_id,
+                    product_data["id"],
+                    product_data["name"],
+                    quantity,
+                    product_data["price"],
+                    subtotal
+                )
+            )
+
+            cursor.execute(
+                """
+                UPDATE products
+                SET stock=stock-?
+                WHERE id=?
+                """,
+                (
+                    quantity,
+                    product_data["id"]
+                )
+            )
+
+        # CLEAR DATABASE CART ONLY AFTER SUCCESSFUL ORDER
+        cursor.execute(
+            """
+            DELETE FROM cart_items
+            WHERE user_id=?
+            """,
+            (user_id,)
+        )
+
+        db.commit()
+        db.close()
+
+        # Clear old session-cart compatibility data too.
+        session["cart"] = {}
+        session.modified = True
+
+        flash(
+            "Order placed successfully! "
+            "Delivery in 20-30 minutes.",
+            "success"
+        )
+
+        return redirect(url_for("orders"))
+
+    simple_items = []
+
+    for product_data, quantity, subtotal in items:
+        simple_items.append({
+            "id": product_data["id"],
+            "name": product_data["name"],
+            "price": product_data["price"],
+            "image": product_data["image"],
+            "quantity": quantity,
+            "subtotal": subtotal
+        })
+
+    db.close()
 
     return render_template(
         "checkout.html",
-        cart=cart_items,
-        total=total
+        items=simple_items,
+        total=total,
+        user=user
     )
 
-
-# =========================================================
-# PLACE ORDER
-# =========================================================
-
-@app.route("/place-order", methods=["POST"])
-def place_order():
-
-    name = request.form.get("name")
-
-    mobile = request.form.get("mobile")
-
-    address = request.form.get("address")
-
-    cart_items = session.get(
-        "cart",
-        []
-    )
-
-    total = 0
-
-    for item in cart_items:
-
-        total += (
-            float(item["price"])
-            * int(item["quantity"])
-        )
-
-    session["order"] = {
-
-        "name": name,
-
-        "mobile": mobile,
-
-        "address": address,
-
-        "items": cart_items,
-
-        "total": total
-    }
-
-    session["cart"] = []
-
-    return redirect("/orders")
-
-
-# =========================================================
+# ============================================================
 # ORDERS
-# =========================================================
+# ============================================================
 
 @app.route("/orders")
+@location_required
 def orders():
+    db = get_db()
 
-    order = session.get("order")
+    orders_list = db.execute(
+        """
+        SELECT *
+        FROM orders
+        WHERE user_id=?
+        ORDER BY id DESC
+        """,
+        (session["user_id"],)
+    ).fetchall()
+
+    db.close()
 
     return render_template(
         "orders.html",
-        order=order
+        orders=orders_list
     )
 
 
-# =========================================================
-# DELIVERY
-# =========================================================
+@app.route("/order/<int:order_id>")
+@location_required
+def order_detail(order_id):
+    db = get_db()
 
-@app.route("/delivery")
-def delivery():
+    order = db.execute(
+        """
+        SELECT *
+        FROM orders
+        WHERE id=?
+        AND user_id=?
+        """,
+        (
+            order_id,
+            session["user_id"]
+        )
+    ).fetchone()
+
+    if not order:
+        db.close()
+
+        flash("Order not found.", "danger")
+
+        return redirect(url_for("orders"))
+
+    order_items = db.execute(
+        """
+        SELECT *
+        FROM order_items
+        WHERE order_id=?
+        """,
+        (order_id,)
+    ).fetchall()
+
+    db.close()
 
     return render_template(
-        "Delivery.html"
+        "orders.html",
+        orders=[order],
+        order_items=order_items,
+        selected_order=order
+    )
+
+# ============================================================
+# PROFILE
+# ============================================================
+
+@app.route("/profile", methods=["GET", "POST"])
+@location_required
+def profile():
+    db = get_db()
+
+    user = db.execute(
+        """
+        SELECT *
+        FROM users
+        WHERE id=?
+        """,
+        (session["user_id"],)
+    ).fetchone()
+
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        phone = request.form.get("phone", "").strip()
+        address = request.form.get("address", "").strip()
+        user_location = request.form.get("location", "").strip()
+
+        db.execute(
+            """
+            UPDATE users
+            SET name=?, phone=?, address=?, location=?
+            WHERE id=?
+            """,
+            (
+                name,
+                phone,
+                address,
+                user_location,
+                session["user_id"]
+            )
+        )
+
+        db.commit()
+        db.close()
+
+        session["user_name"] = name
+        session["user_location"] = user_location
+        session.modified = True
+
+        flash(
+            "Profile updated successfully.",
+            "success"
+        )
+
+        return redirect(url_for("home"))
+
+    db.close()
+
+    return render_template(
+        "profile.html",
+        user=user
+    )
+
+# ============================================================
+# API
+# ============================================================
+
+@app.route("/api/cart-count")
+def api_cart_count():
+    return jsonify(
+        success=True,
+        count=cart_count()
     )
 
 
-# =========================================================
-# START APPLICATION
-# =========================================================
+@app.route("/api/products")
+def api_products():
+    products_list = get_all_products()
+
+    return jsonify(
+        success=True,
+        products=[
+            dict(product)
+            for product in products_list
+        ]
+    )
+
+
+@app.route("/api/product/<int:product_id>")
+def api_product(product_id):
+    product_data = get_single_product(product_id)
+
+    if product_data:
+        return jsonify(
+            success=True,
+            product=dict(product_data)
+        )
+
+    return jsonify(
+        success=False,
+        message="Product not found"
+    ), 404
+
+
+@app.route("/api/search")
+def api_search():
+    query = request.args.get("q", "").strip()
+
+    db = get_db()
+
+    if query:
+        products_list = db.execute(
+            """
+            SELECT
+                p.id,
+                p.name,
+                p.category_id,
+                c.name AS category,
+                p.price,
+                p.image,
+                p.description,
+                p.stock,
+                p.delivery_time,
+                p.created_at
+            FROM products p
+            LEFT JOIN categories c ON p.category_id=c.id
+            WHERE p.name LIKE ?
+               OR c.name LIKE ?
+               OR p.description LIKE ?
+            ORDER BY p.name
+            """,
+            (
+                f"%{query}%",
+                f"%{query}%",
+                f"%{query}%"
+            )
+        ).fetchall()
+    else:
+        products_list = []
+
+    db.close()
+
+    return jsonify(
+        success=True,
+        products=[
+            dict(product)
+            for product in products_list
+        ]
+    )
+
+
+@app.route("/api/categories")
+def api_categories():
+    db = get_db()
+
+    categories_list = db.execute(
+        """
+        SELECT id, name
+        FROM categories
+        ORDER BY id
+        """
+    ).fetchall()
+
+    db.close()
+
+    return jsonify(
+        success=True,
+        categories=[
+            dict(category)
+            for category in categories_list
+        ]
+    )
+
+
+@app.route("/api/delivery-info")
+def delivery_info():
+    return jsonify(
+        success=True,
+        available=True,
+        delivery_time="20-30 minutes",
+        location=session.get("user_location", "")
+    )
+
+# ============================================================
+# HEALTH
+# ============================================================
+
+@app.route("/health")
+def health():
+    return jsonify(
+        status="OK",
+        application="AgroQuick",
+        delivery="20-30 minutes"
+    )
+
+# ============================================================
+# START DATABASE
+# ============================================================
+
+init_db()
+
+# ============================================================
+# RUN
+# ============================================================
 
 if __name__ == "__main__":
-
-    port = int(
-        os.environ.get(
-            "PORT",
-            10000
-        )
-    )
-
     app.run(
         host="0.0.0.0",
-        port=port
+        port=int(os.environ.get("PORT", 5000)),
+        debug=True
     )

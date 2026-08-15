@@ -1,173 +1,354 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{{ product.name }} - AgroQuick</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AgroQuick - Products</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #f4f8f2;
+            background: #f5f7f5;
+            color: #222;
         }
 
-        header {
-            background: #2e7d32;
+        nav {
+            background: #16823a;
+            padding: 16px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .logo {
             color: white;
-            text-align: center;
-            padding: 20px;
+            font-size: 26px;
+            font-weight: bold;
+            text-decoration: none;
         }
 
-        .product-page {
-            max-width: 900px;
-            margin: 40px auto;
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .cart-button {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px #ccc;
+            color: #16823a !important;
+            padding: 9px 16px;
+            border-radius: 20px;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1250px;
+            margin: 35px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #16823a;
+            margin-bottom: 30px;
+        }
+
+        .flash {
+            padding: 14px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: #e8f5e9;
+            color: #176b2d;
+            font-weight: bold;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
         }
 
         .product-image {
             width: 100%;
-            max-width: 400px;
-            height: 300px;
+            height: 190px;
             object-fit: contain;
-            display: block;
-            margin: auto;
+            border-radius: 10px;
+            background: #f1f1f1;
         }
 
-        h1 {
-            color: #2e7d32;
-        }
-
-        .price {
-            font-size: 28px;
+        .product-name {
+            font-size: 20px;
             font-weight: bold;
-            color: #e65100;
+            margin: 14px 0 7px;
         }
 
         .category {
-            color: #555;
-            font-size: 18px;
+            color: #16823a;
+            font-size: 14px;
+            font-weight: bold;
         }
 
         .description {
-            line-height: 1.7;
-            color: #333;
+            color: #666;
+            min-height: 42px;
         }
 
-        .info {
-            background: #f1f8e9;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 12px 0;
         }
 
-        .buttons {
-            margin-top: 25px;
+        .delivery {
+            color: #16823a;
+            font-weight: bold;
+            margin-bottom: 12px;
         }
 
-        button,
-        .back {
-            border: none;
-            padding: 13px 22px;
+        .cart-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .quantity {
+            width: 65px;
+            padding: 11px;
+            border: 1px solid #ccc;
             border-radius: 7px;
+        }
+
+        .add-button {
+            flex: 1;
+            border: none;
+            background: #16823a;
             color: white;
+            padding: 11px;
+            border-radius: 7px;
             cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .add-button:hover {
+            background: #0e642c;
+        }
+
+        .details-button {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #16823a;
+            color: #16823a;
             text-decoration: none;
-            font-size: 16px;
-            margin-right: 10px;
+            border-radius: 7px;
+            font-weight: bold;
         }
 
-        button {
-            background: #2e7d32;
-        }
-
-        .back {
-            background: #757575;
+        .empty {
+            text-align: center;
+            padding: 50px;
+            font-size: 20px;
         }
     </style>
 </head>
 
 <body>
 
-<header>
-    <h1>🌾 AgroQuick</h1>
-    <p>Farming Products Marketplace</p>
-</header>
+<nav>
 
-<div class="product-page">
+    <a href="{{ url_for('home') }}" class="logo">
+        🌱 AgroQuick
+    </a>
 
-    <img
-        class="product-image"
-        src="{{ product.image }}"
-        alt="{{ product.name }}"
-    >
+    <div class="nav-links">
 
-    <h1>{{ product.name }}</h1>
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
 
-    <p class="category">
-        Category: {{ product.category }}
-    </p>
+        <a href="{{ url_for('products') }}">
+            Products
+        </a>
 
-    <p class="price">
-        ₹{{ product.price }}
-    </p>
+        <a href="{{ url_for('seeds') }}">
+            Seeds
+        </a>
 
-    <div class="info">
+        <a href="{{ url_for('tools') }}">
+            Tools
+        </a>
 
-        <h2>Product Description</h2>
+        <a href="{{ url_for('equipment') }}">
+            Equipment
+        </a>
 
-        <p class="description">
-            {{ product.description }}
-        </p>
-
-        <h2>Uses</h2>
-
-        <p>
-            {{ product.uses }}
-        </p>
-
-        <h2>Specifications</h2>
-
-        <p>
-            {{ product.specifications }}
-        </p>
-
-        <h2>Availability</h2>
-
-        <p>
-            {{ product.stock }}
-        </p>
-
-    </div>
-
-    <div class="buttons">
-
-        <form action="/add-to-cart" method="POST" style="display:inline;">
-
-            <input
-                type="hidden"
-                name="product"
-                value="{{ product.name }}"
-            >
-
-            <input
-                type="hidden"
-                name="price"
-                value="{{ product.price }}"
-            >
-
-            <button type="submit">
-                🛒 Add to Cart
-            </button>
-
-        </form>
-
-        <a class="back" href="/search">
-            🔎 Back to Search
+        <a href="{{ url_for('cart') }}" class="cart-button">
+            🛒 Cart
         </a>
 
     </div>
+
+</nav>
+
+
+<div class="container">
+
+    <h1>AgroQuick Products</h1>
+
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="flash">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    {% if products %}
+
+        <div class="product-grid">
+
+            {% for product in products %}
+
+                <div class="product-card">
+
+                    {% if product['image'] %}
+
+                        <img
+                            src="{{ url_for('static', filename='images/' + product['image']) }}"
+                            class="product-image"
+                            alt="{{ product['name'] }}"
+                            onerror="this.style.display='none';"
+                        >
+
+                    {% endif %}
+
+
+                    <div class="product-name">
+                        {{ product['name'] }}
+                    </div>
+
+
+                    <div class="category">
+                        {{ product['category'] }}
+                    </div>
+
+
+                    <div class="description">
+                        {{ product['description'] }}
+                    </div>
+
+
+                    <div class="price">
+                        ₹{{ "%.2f"|format(product['price']) }}
+                    </div>
+
+
+                    <div class="delivery">
+                        🚚 {{ product['delivery_time'] }}
+                    </div>
+
+
+                    {% if product['stock'] > 0 %}
+
+                        <form
+                            action="{{ url_for('add_to_cart_post') }}"
+                            method="POST"
+                            class="cart-form"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="product_id"
+                                value="{{ product['id'] }}"
+                            >
+
+                            <input
+                                type="number"
+                                name="quantity"
+                                value="1"
+                                min="1"
+                                max="{{ product['stock'] }}"
+                                class="quantity"
+                            >
+
+                            <button
+                                type="submit"
+                                class="add-button"
+                            >
+                                🛒 Add to Cart
+                            </button>
+
+                        </form>
+
+                    {% else %}
+
+                        <button
+                            class="add-button"
+                            disabled
+                        >
+                            Out of Stock
+                        </button>
+
+                    {% endif %}
+
+
+                    <a
+                        href="{{ url_for('product', product_id=product['id']) }}"
+                        class="details-button"
+                    >
+                        View Details
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty">
+            No products available.
+        </div>
+
+    {% endif %}
 
 </div>
 
